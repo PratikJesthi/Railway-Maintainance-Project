@@ -1,0 +1,42 @@
+======================================================================
+RAILOPT-AI — RAILWAY DATA AUDIT REPORT
+======================================================================
+
+STATIONS
+----------------------------------------------------------------------
+Total features          : 8990
+Unique station codes    : 8989
+Missing station codes   : 1
+Missing station names   : 1
+Invalid coordinates     : 293
+Geometry types          : {'Point': 8697}
+Duplicate station codes : 0
+
+TRAIN ROUTES
+----------------------------------------------------------------------
+Total route features    : 5208
+Geometry types          : {'LineString': 5208}
+Coordinate count        : {'minimum': 1, 'maximum': 684, 'average': 79.57}
+
+SCHEDULES
+----------------------------------------------------------------------
+Total schedule records  : 417080
+Unique train numbers    : 5208
+Unique station codes    : 8538
+Unique train names      : 3947
+Unique days             : 13
+Missing arrival         : 27835
+Missing departure       : 27827
+Duplicate record IDs    : 0
+Train/day groups        : 7700
+Stops per train/day     : {'minimum': 1, 'maximum': 257, 'average': 51.24}
+
+CROSS-DATASET CHECK
+----------------------------------------------------------------------
+Station master codes    : 8989
+Schedule station codes  : 8538
+Codes missing in master : 0
+
+======================================================================
+END OF REPORT
+======================================================================

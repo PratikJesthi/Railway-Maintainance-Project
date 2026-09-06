@@ -1,0 +1,72 @@
+========================================================================
+RAILOPT-AI — FINAL VALIDATION REPORT
+========================================================================
+
+DATASET SIZE
+------------------------------------------------------------------------
+Input movements       : 386,819
+Trusted movements     : 376,928
+Unresolved movements   : 6,314
+Invalid movements     : 3,577
+
+FINAL DISTRIBUTION
+------------------------------------------------------------------------
+Trusted      : 97.44%
+Unresolved   : 1.63%
+Invalid      : 0.92%
+
+IMPLIED SPEED
+------------------------------------------------------------------------
+Count       : 380,377
+Minimum     : 0.00 km/h
+Median      : 58.85 km/h
+P95         : 98.38 km/h
+P99         : 158.50 km/h
+P99.5       : 206.00 km/h
+P99.9       : 410.36 km/h
+Maximum     : 1068.12 km/h
+
+STRAIGHT-LINE DISTANCE
+------------------------------------------------------------------------
+Count       : 383,697
+Minimum     : 0.000 km
+Median      : 6.583 km
+P95         : 12.846 km
+P99         : 17.115 km
+P99.5       : 19.993 km
+Maximum     : 425.692 km
+
+VALIDATION REASONS
+------------------------------------------------------------------------
+invalid_travel_time                               3,478
+missing_coordinates                               3,122
+non_increasing_journey_time                       2,095
+statistical_distance_outlier                      1,907
+statistical_speed_outlier                         1,901
+repeated_station_in_journey                       1,749
+near_zero_geographic_distance                       165
+same_origin_destination_station                     110
+overnight_candidate                                  83
+missing_destination_station                          50
+missing_origin_station                               49
+
+INTERPRETATION
+------------------------------------------------------------------------
+1. INVALID records are excluded from the trusted baseline.
+2. UNRESOLVED records are preserved separately.
+3. Statistical speed/distance outliers are NOT assumed
+   to be physically impossible railway movements.
+4. Straight-line distance is a diagnostic, not rail-track
+   distance.
+5. Implied speed is NOT actual train operating speed.
+6. Missing coordinates do not invalidate an otherwise
+   usable operational movement.
+7. Overnight timetable transitions are preserved.
+
+OUTPUT FILES
+------------------------------------------------------------------------
+Trusted dataset    : final/train_movements_final.parquet
+Unresolved dataset : final/train_movements_unresolved.parquet
+Summary            : final/validation_summary.csv
+Report             : audit/final_validation_report.txt
+========================================================================

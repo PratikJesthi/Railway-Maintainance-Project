@@ -1,0 +1,68 @@
+========================================================================
+RAILOPT-AI — V3 CASCADING DISRUPTION GENERATION REPORT
+========================================================================
+
+SOURCE DATA
+------------------------------------------------------------------------
+V2 scenarios             : 5,000
+
+V3 DATASET
+------------------------------------------------------------------------
+Scenarios generated      : 5,000
+Cascade events           : 171,882
+Affected movement rows   : 102,363,741
+
+CASCADE STATISTICS
+------------------------------------------------------------------------
+Average cascade depth    : 3.82
+Maximum cascade depth    : 5
+Average affected journeys: 34.38
+
+CASCADE DISTRIBUTION
+------------------------------------------------------------------------
+DEEP_NETWORK_CASCADE             3,410  ( 68.20%)
+MULTI_STAGE_CASCADE                665  ( 13.30%)
+DIRECT_PROPAGATION                 650  ( 13.00%)
+SINGLE_EVENT                       275  (  5.50%)
+
+ROOT SEVERITY DISTRIBUTION
+------------------------------------------------------------------------
+MEDIUM                           1,766  ( 35.32%)
+LOW                              1,259  ( 25.18%)
+HIGH                             1,245  ( 24.90%)
+SEVERE                             730  ( 14.60%)
+
+GROUND TRUTH
+------------------------------------------------------------------------
+Root disruptions are explicitly labelled.
+Downstream causal propagation is explicitly labelled.
+Propagation depth is recorded.
+Delay propagation is recorded.
+Optimal dispatch actions remain undefined.
+Optimization labels will be generated later.
+
+NETWORK MODEL
+------------------------------------------------------------------------
+V3 uses the V2 logical conflict graph.
+It does NOT claim that each logical conflict represents
+a physical railway block.
+Stage-6 infrastructure data will enrich the network model.
+
+REPRODUCIBILITY
+------------------------------------------------------------------------
+Random seed              : 26027
+Maximum cascade depth    : 5
+Propagation probability  : 0.80
+Movement batch size      : 100,000
+
+OUTPUT FILES
+------------------------------------------------------------------------
+Scenarios     : synthetic_v3/v3_scenarios.parquet
+Movements     : synthetic_v3/v3_movements.parquet
+Propagation   : synthetic_v3/v3_propagation.parquet
+Ground truth  : synthetic_v3/v3_ground_truth.parquet
+Report        : synthetic_v3/v3_generation_report.txt
+
+========================================================================
+V3 GENERATION COMPLETE
+========================================================================

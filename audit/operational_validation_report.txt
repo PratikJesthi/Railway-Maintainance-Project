@@ -1,0 +1,173 @@
+===========================================================================
+RAILOPT-AI — OPERATIONAL VALIDATION REPORT
+===========================================================================
+
+TRAVEL TIME DISTRIBUTION
+---------------------------------------------------------------------------
+count     : 386,567.00
+min       : 0.00
+p01       : 60.00
+p05       : 120.00
+p25       : 300.00
+median    : 420.00
+p75       : 600.00
+p95       : 1,080.00
+p99       : 2,100.00
+max       : 117,300.00
+mean      : 603.18
+
+STATION DISTANCE DISTRIBUTION
+---------------------------------------------------------------------------
+count     : 383,697.00
+min       : 0.00
+p01       : 0.91
+p05       : 1.90
+p25       : 4.47
+median    : 6.58
+p75       : 8.92
+p95       : 12.85
+p99       : 17.11
+max       : 425.69
+mean      : 6.98
+
+IMPLIED SPEED DISTRIBUTION
+---------------------------------------------------------------------------
+count     : 380,377.00
+min       : 0.00
+p01       : 9.47
+p05       : 23.38
+p25       : 44.80
+median    : 58.85
+p75       : 72.09
+p95       : 98.38
+p99       : 158.50
+max       : 1,068.12
+mean      : 60.69
+
+SUSPICIOUS RECORD COUNTS
+---------------------------------------------------------------------------
+zero_travel_time                         3,226
+speed_over_250_kmh                       1,055
+travel_time_over_12_hours                512
+station_distance_over_200_km             8
+
+SUSPICIOUS RECORD SAMPLES
+---------------------------------------------------------------------------
+{'index': 475, 'reason': 'zero_travel_time', 'train_number': '12260', 'day': '1', 'from_station': 'ANVR', 'to_station': 'ANVT', 'travel_time_seconds': 0.0, 'distance_km': 0.23997533058980527}
+{'index': 542, 'reason': 'zero_travel_time', 'train_number': '12720', 'day': '1', 'from_station': 'DYE', 'to_station': 'SFX', 'travel_time_seconds': 0.0, 'distance_km': 0.6313545620165827}
+{'index': 550, 'reason': 'zero_travel_time', 'train_number': '12720', 'day': '1', 'from_station': 'GOPL', 'to_station': 'GDPL', 'travel_time_seconds': 0.0, 'distance_km': 0.07988771956961445}
+{'index': 583, 'reason': 'zero_travel_time', 'train_number': '56656', 'day': '1', 'from_station': 'KLAD', 'to_station': 'KALD', 'travel_time_seconds': 0.0, 'distance_km': nan}
+{'index': 1043, 'reason': 'zero_travel_time', 'train_number': '09002', 'day': '1', 'from_station': 'MYG', 'to_station': 'MYGL', 'travel_time_seconds': 0.0, 'distance_km': 0.08945076302132948}
+{'index': 1475, 'reason': 'zero_travel_time', 'train_number': '57473', 'day': '1', 'from_station': 'GOPL', 'to_station': 'GDPL', 'travel_time_seconds': 0.0, 'distance_km': 0.07988771956961445}
+{'index': 1516, 'reason': 'zero_travel_time', 'train_number': '56878', 'day': '1', 'from_station': 'CUD', 'to_station': 'TDPR', 'travel_time_seconds': 0.0, 'distance_km': 0.010870458084232714}
+{'index': 2188, 'reason': 'zero_travel_time', 'train_number': '12031', 'day': '1', 'from_station': 'NDAZ', 'to_station': 'ANDI', 'travel_time_seconds': 0.0, 'distance_km': 0.04318742687436478}
+{'index': 2237, 'reason': 'zero_travel_time', 'train_number': '12031', 'day': '1', 'from_station': 'MLIH', 'to_station': 'PGW', 'travel_time_seconds': 0.0, 'distance_km': 4.745285751852198}
+{'index': 2352, 'reason': 'zero_travel_time', 'train_number': '12064', 'day': '1', 'from_station': 'JWP', 'to_station': 'HW', 'travel_time_seconds': 0.0, 'distance_km': 3.9283080346621633}
+{'index': 2423, 'reason': 'zero_travel_time', 'train_number': '58423', 'day': '1', 'from_station': 'KIS', 'to_station': 'MACR', 'travel_time_seconds': 0.0, 'distance_km': 6.175880596091723}
+{'index': 3130, 'reason': 'zero_travel_time', 'train_number': '29060', 'day': '1', 'from_station': 'MYG', 'to_station': 'MYGL', 'travel_time_seconds': 0.0, 'distance_km': 0.08945076302132948}
+{'index': 3174, 'reason': 'zero_travel_time', 'train_number': '12071', 'day': '1', 'from_station': 'CHG', 'to_station': 'CRD', 'travel_time_seconds': 0.0, 'distance_km': 0.7684692066867395}
+{'index': 3522, 'reason': 'zero_travel_time', 'train_number': '12058', 'day': '1', 'from_station': 'ANDI', 'to_station': 'NDAZ', 'travel_time_seconds': 0.0, 'distance_km': 0.04318742687436478}
+{'index': 3664, 'reason': 'zero_travel_time', 'train_number': '19915', 'day': '1', 'from_station': 'SBT', 'to_station': 'SBI', 'travel_time_seconds': 0.0, 'distance_km': 0.5515848171318605}
+{'index': 3833, 'reason': 'zero_travel_time', 'train_number': '52982', 'day': '1', 'from_station': 'LMNR', 'to_station': 'INDB', 'travel_time_seconds': 0.0, 'distance_km': 2.931004336333929}
+{'index': 3947, 'reason': 'zero_travel_time', 'train_number': '19772', 'day': '1', 'from_station': 'LDW', 'to_station': 'LDH', 'travel_time_seconds': 0.0, 'distance_km': 13.048797877951497}
+{'index': 4101, 'reason': 'zero_travel_time', 'train_number': '22855', 'day': '1', 'from_station': 'CNT', 'to_station': 'BLDA', 'travel_time_seconds': 0.0, 'distance_km': 0.849267218890426}
+{'index': 4217, 'reason': 'zero_travel_time', 'train_number': '17640', 'day': '1', 'from_station': 'GDPL', 'to_station': 'GOPL', 'travel_time_seconds': 0.0, 'distance_km': 0.07988771956961445}
+{'index': 4264, 'reason': 'zero_travel_time', 'train_number': '12957', 'day': '1', 'from_station': 'SBI', 'to_station': 'SBT', 'travel_time_seconds': 0.0, 'distance_km': 0.5515848171318605}
+{'index': 4520, 'reason': 'zero_travel_time', 'train_number': '64094', 'day': '1', 'from_station': 'DBSI', 'to_station': 'PTNR', 'travel_time_seconds': 0.0, 'distance_km': 1.6856991053364059}
+{'index': 4633, 'reason': 'zero_travel_time', 'train_number': '51434', 'day': '1', 'from_station': 'BTW', 'to_station': 'KCB', 'travel_time_seconds': 0.0, 'distance_km': 7.280598829386907}
+{'index': 4720, 'reason': 'zero_travel_time', 'train_number': '12214', 'day': '1', 'from_station': 'PTNR', 'to_station': 'KRTN', 'travel_time_seconds': 0.0, 'distance_km': 1.8184307012346086}
+{'index': 4723, 'reason': 'zero_travel_time', 'train_number': '12214', 'day': '1', 'from_station': 'DLPI', 'to_station': 'BRSQ', 'travel_time_seconds': 0.0, 'distance_km': 1.67000518958224}
+{'index': 4727, 'reason': 'zero_travel_time', 'train_number': '12214', 'day': '1', 'from_station': 'DSJ', 'to_station': 'SOJ', 'travel_time_seconds': 0.0, 'distance_km': 0.9154723677681883}
+{'index': 4949, 'reason': 'zero_travel_time', 'train_number': '12390', 'day': '1', 'from_station': 'GNVR', 'to_station': 'VSP', 'travel_time_seconds': 0.0, 'distance_km': 0.2762417233206211}
+{'index': 5049, 'reason': 'zero_travel_time', 'train_number': '12078', 'day': '1', 'from_station': 'IPPM', 'to_station': 'IPPN', 'travel_time_seconds': 0.0, 'distance_km': 0.06017403153034403}
+{'index': 5117, 'reason': 'zero_travel_time', 'train_number': '41507', 'day': '1', 'from_station': 'INDR', 'to_station': 'TYMR', 'travel_time_seconds': 0.0, 'distance_km': nan}
+{'index': 5281, 'reason': 'zero_travel_time', 'train_number': '15216', 'day': '1', 'from_station': 'BMKI', 'to_station': 'MKI', 'travel_time_seconds': 0.0, 'distance_km': 0.024015813995498937}
+{'index': 5502, 'reason': 'zero_travel_time', 'train_number': '56237', 'day': '1', 'from_station': 'CGKP', 'to_station': 'CGKR', 'travel_time_seconds': 0.0, 'distance_km': 1.6939383018858203}
+{'index': 5773, 'reason': 'zero_travel_time', 'train_number': '14318', 'day': '1', 'from_station': 'DNRA', 'to_station': 'RK', 'travel_time_seconds': 0.0, 'distance_km': 2.830118270635741}
+{'index': 6087, 'reason': 'zero_travel_time', 'train_number': '54805', 'day': '1', 'from_station': 'SBI', 'to_station': 'SBT', 'travel_time_seconds': 0.0, 'distance_km': 0.5515848171318605}
+{'index': 6115, 'reason': 'zero_travel_time', 'train_number': '59547', 'day': '1', 'from_station': 'SBI', 'to_station': 'SBT', 'travel_time_seconds': 0.0, 'distance_km': 0.5515848171318605}
+{'index': 6122, 'reason': 'zero_travel_time', 'train_number': '59547', 'day': '1', 'from_station': 'SBT', 'to_station': 'SBI', 'travel_time_seconds': 0.0, 'distance_km': 0.5515848171318605}
+{'index': 6123, 'reason': 'zero_travel_time', 'train_number': '59547', 'day': '1', 'from_station': 'SBI', 'to_station': 'CDLD', 'travel_time_seconds': 0.0, 'distance_km': nan}
+{'index': 6124, 'reason': 'zero_travel_time', 'train_number': '59547', 'day': '1', 'from_station': 'CDLD', 'to_station': 'ABD', 'travel_time_seconds': 0.0, 'distance_km': nan}
+{'index': 6204, 'reason': 'zero_travel_time', 'train_number': '53004', 'day': '1', 'from_station': 'KWAE', 'to_station': 'KWF', 'travel_time_seconds': 0.0, 'distance_km': 0.0769079244551573}
+{'index': 6327, 'reason': 'zero_travel_time', 'train_number': '12866', 'day': '1', 'from_station': 'GMH', 'to_station': 'ADTP', 'travel_time_seconds': 0.0, 'distance_km': 5.984158783122157}
+{'index': 6328, 'reason': 'zero_travel_time', 'train_number': '12866', 'day': '1', 'from_station': 'ADTP', 'to_station': 'TATA', 'travel_time_seconds': 0.0, 'distance_km': 4.513219628315059}
+{'index': 6482, 'reason': 'zero_travel_time', 'train_number': '58840', 'day': '1', 'from_station': 'BUQ', 'to_station': 'KDHI', 'travel_time_seconds': 0.0, 'distance_km': 13.621541929200987}
+{'index': 6567, 'reason': 'zero_travel_time', 'train_number': '12581', 'day': '1', 'from_station': 'SJVP', 'to_station': 'JET', 'travel_time_seconds': 0.0, 'distance_km': 1.231155208711943}
+{'index': 6568, 'reason': 'zero_travel_time', 'train_number': '12581', 'day': '1', 'from_station': 'JET', 'to_station': 'SC', 'travel_time_seconds': 0.0, 'distance_km': 1.5456968124154926}
+{'index': 7060, 'reason': 'zero_travel_time', 'train_number': '57381', 'day': '1', 'from_station': 'NBR', 'to_station': 'PDKN', 'travel_time_seconds': 0.0, 'distance_km': 2.0070314465326926}
+{'index': 7141, 'reason': 'zero_travel_time', 'train_number': '57307', 'day': '1', 'from_station': 'GOPL', 'to_station': 'GDPL', 'travel_time_seconds': 0.0, 'distance_km': 0.07988771956961445}
+{'index': 7223, 'reason': 'zero_travel_time', 'train_number': '12989', 'day': '1', 'from_station': 'MYGL', 'to_station': 'MYG', 'travel_time_seconds': 0.0, 'distance_km': 0.08945076302132948}
+{'index': 7250, 'reason': 'zero_travel_time', 'train_number': '12989', 'day': '1', 'from_station': 'SBI', 'to_station': 'SBT', 'travel_time_seconds': 0.0, 'distance_km': 0.5515848171318605}
+{'index': 7470, 'reason': 'zero_travel_time', 'train_number': '54075', 'day': '1', 'from_station': 'MK', 'to_station': 'KSRK', 'travel_time_seconds': 0.0, 'distance_km': 1.6294465685754125}
+{'index': 7494, 'reason': 'zero_travel_time', 'train_number': '54075', 'day': '1', 'from_station': 'LPB', 'to_station': 'LDP', 'travel_time_seconds': 0.0, 'distance_km': 0.913542052580337}
+{'index': 7714, 'reason': 'zero_travel_time', 'train_number': '24227', 'day': '1', 'from_station': 'LKO', 'to_station': 'LJN', 'travel_time_seconds': 0.0, 'distance_km': 0.6805328245067724}
+{'index': 7758, 'reason': 'zero_travel_time', 'train_number': '54252', 'day': '1', 'from_station': 'FZL', 'to_station': 'MZM', 'travel_time_seconds': 0.0, 'distance_km': 5.506835904204867}
+{'index': 8034, 'reason': 'zero_travel_time', 'train_number': '14731', 'day': '1', 'from_station': 'NDAZ', 'to_station': 'ANDI', 'travel_time_seconds': 0.0, 'distance_km': 0.04318742687436478}
+{'index': 8826, 'reason': 'zero_travel_time', 'train_number': '59026', 'day': '1', 'from_station': 'NOL', 'to_station': 'UDN', 'travel_time_seconds': 0.0, 'distance_km': 5.4083657009035875}
+{'index': 9060, 'reason': 'zero_travel_time', 'train_number': '40037', 'day': '1', 'from_station': 'MN', 'to_station': 'TLM', 'travel_time_seconds': 0.0, 'distance_km': 1.0091968211116318}
+{'index': 9153, 'reason': 'zero_travel_time', 'train_number': '16732', 'day': '1', 'from_station': 'CGKP', 'to_station': 'CGKR', 'travel_time_seconds': 0.0, 'distance_km': 1.6939383018858203}
+{'index': 9270, 'reason': 'zero_travel_time', 'train_number': '15772', 'day': '1', 'from_station': 'SMTA', 'to_station': 'KAMG', 'travel_time_seconds': 0.0, 'distance_km': 8.673741992633543}
+{'index': 9271, 'reason': 'zero_travel_time', 'train_number': '15772', 'day': '1', 'from_station': 'KAMG', 'to_station': 'APDJ', 'travel_time_seconds': 0.0, 'distance_km': 19.185323677440667}
+{'index': 9452, 'reason': 'zero_travel_time', 'train_number': '19018', 'day': '1', 'from_station': 'MYG', 'to_station': 'MYGL', 'travel_time_seconds': 0.0, 'distance_km': 0.08945076302132948}
+{'index': 9469, 'reason': 'zero_travel_time', 'train_number': '12789', 'day': '1', 'from_station': 'SUX', 'to_station': 'MNM', 'travel_time_seconds': 0.0, 'distance_km': 9.294000335020735}
+{'index': 9774, 'reason': 'zero_travel_time', 'train_number': '55333', 'day': '1', 'from_station': 'IDH', 'to_station': 'AF', 'travel_time_seconds': 0.0, 'distance_km': 2.4167872476333794}
+{'index': 10437, 'reason': 'zero_travel_time', 'train_number': '54377', 'day': '1', 'from_station': 'MK', 'to_station': 'KSRK', 'travel_time_seconds': 0.0, 'distance_km': 1.6294465685754125}
+{'index': 10666, 'reason': 'zero_travel_time', 'train_number': '19109', 'day': '1', 'from_station': 'MYGL', 'to_station': 'MYG', 'travel_time_seconds': 0.0, 'distance_km': 0.08945076302132948}
+{'index': 11136, 'reason': 'zero_travel_time', 'train_number': '54355', 'day': '1', 'from_station': 'MK', 'to_station': 'KSRK', 'travel_time_seconds': 0.0, 'distance_km': 1.6294465685754125}
+{'index': 11147, 'reason': 'zero_travel_time', 'train_number': '56891', 'day': '1', 'from_station': 'MAX', 'to_station': 'TNK', 'travel_time_seconds': 0.0, 'distance_km': nan}
+{'index': 11538, 'reason': 'zero_travel_time', 'train_number': '12951', 'day': '1', 'from_station': 'BA', 'to_station': 'BDTS', 'travel_time_seconds': 0.0, 'distance_km': 0.829177182571434}
+{'index': 11603, 'reason': 'zero_travel_time', 'train_number': '12951', 'day': '1', 'from_station': 'MYGL', 'to_station': 'MYG', 'travel_time_seconds': 0.0, 'distance_km': 0.08945076302132948}
+{'index': 11860, 'reason': 'zero_travel_time', 'train_number': '47136', 'day': '1', 'from_station': 'NCHS', 'to_station': 'BMT', 'travel_time_seconds': 0.0, 'distance_km': 0.9870272027923422}
+{'index': 12222, 'reason': 'zero_travel_time', 'train_number': '51196', 'day': '1', 'from_station': 'GNVR', 'to_station': 'VSP', 'travel_time_seconds': 0.0, 'distance_km': 0.2762417233206211}
+{'index': 12303, 'reason': 'zero_travel_time', 'train_number': '56323', 'day': '1', 'from_station': 'PKP', 'to_station': 'BFR', 'travel_time_seconds': 0.0, 'distance_km': nan}
+{'index': 12306, 'reason': 'zero_travel_time', 'train_number': '56323', 'day': '1', 'from_station': 'KALD', 'to_station': 'KLAD', 'travel_time_seconds': 0.0, 'distance_km': nan}
+{'index': 12527, 'reason': 'zero_travel_time', 'train_number': '19782', 'day': '1', 'from_station': 'LDW', 'to_station': 'LDH', 'travel_time_seconds': 0.0, 'distance_km': 13.048797877951497}
+{'index': 12713, 'reason': 'zero_travel_time', 'train_number': '12055', 'day': '1', 'from_station': 'ANVR', 'to_station': 'ANVT', 'travel_time_seconds': 0.0, 'distance_km': 0.23997533058980527}
+{'index': 12750, 'reason': 'zero_travel_time', 'train_number': '12055', 'day': '1', 'from_station': 'JWP', 'to_station': 'HW', 'travel_time_seconds': 0.0, 'distance_km': 3.9283080346621633}
+{'index': 12791, 'reason': 'zero_travel_time', 'train_number': '51813', 'day': '1', 'from_station': 'CNB', 'to_station': 'GOY', 'travel_time_seconds': 0.0, 'distance_km': 3.75943016983935}
+{'index': 12814, 'reason': 'zero_travel_time', 'train_number': '12063', 'day': '1', 'from_station': 'DNRA', 'to_station': 'RK', 'travel_time_seconds': 0.0, 'distance_km': 2.830118270635741}
+{'index': 13019, 'reason': 'zero_travel_time', 'train_number': '12663', 'day': '1', 'from_station': 'CNT', 'to_station': 'BLDA', 'travel_time_seconds': 0.0, 'distance_km': 0.849267218890426}
+{'index': 13303, 'reason': 'zero_travel_time', 'train_number': '12806', 'day': '1', 'from_station': 'PRH', 'to_station': 'EE', 'travel_time_seconds': 0.0, 'distance_km': 1.492948467833044}
+{'index': 13435, 'reason': 'zero_travel_time', 'train_number': '17651', 'day': '1', 'from_station': 'WJ', 'to_station': 'NTT', 'travel_time_seconds': 0.0, 'distance_km': 7.372872939939635}
+{'index': 13436, 'reason': 'zero_travel_time', 'train_number': '17651', 'day': '1', 'from_station': 'NTT', 'to_station': 'CJE', 'travel_time_seconds': 0.0, 'distance_km': 5.14477143632788}
+{'index': 13437, 'reason': 'zero_travel_time', 'train_number': '17651', 'day': '1', 'from_station': 'CJE', 'to_station': 'CJ', 'travel_time_seconds': 0.0, 'distance_km': 1.2976914389408916}
+{'index': 13438, 'reason': 'zero_travel_time', 'train_number': '17651', 'day': '1', 'from_station': 'CJ', 'to_station': 'TMLP', 'travel_time_seconds': 0.0, 'distance_km': 12.366003555771508}
+{'index': 13439, 'reason': 'zero_travel_time', 'train_number': '17651', 'day': '1', 'from_station': 'TMLP', 'to_station': 'TKO', 'travel_time_seconds': 0.0, 'distance_km': 7.510059337923488}
+{'index': 13440, 'reason': 'zero_travel_time', 'train_number': '17651', 'day': '1', 'from_station': 'TKO', 'to_station': 'AJJ', 'travel_time_seconds': 0.0, 'distance_km': 6.493833651494778}
+{'index': 13623, 'reason': 'zero_travel_time', 'train_number': '43851', 'day': '1', 'from_station': 'KAVM', 'to_station': 'WCN', 'travel_time_seconds': 0.0, 'distance_km': 2.9045376152213485}
+{'index': 13629, 'reason': 'zero_travel_time', 'train_number': '43851', 'day': '1', 'from_station': 'BBQ', 'to_station': 'VJM', 'travel_time_seconds': 0.0, 'distance_km': 1.690039706347893}
+{'index': 13837, 'reason': 'zero_travel_time', 'train_number': '51809', 'day': '1', 'from_station': 'SHW', 'to_station': 'BNT', 'travel_time_seconds': 0.0, 'distance_km': 10.512800344117524}
+{'index': 13976, 'reason': 'zero_travel_time', 'train_number': '14123', 'day': '1', 'from_station': 'LKO', 'to_station': 'LJN', 'travel_time_seconds': 0.0, 'distance_km': 0.6805328245067724}
+{'index': 14120, 'reason': 'zero_travel_time', 'train_number': '12703', 'day': '1', 'from_station': 'CNT', 'to_station': 'BLDA', 'travel_time_seconds': 0.0, 'distance_km': 0.849267218890426}
+{'index': 14743, 'reason': 'zero_travel_time', 'train_number': '54233', 'day': '1', 'from_station': 'DAL', 'to_station': 'LC', 'travel_time_seconds': 0.0, 'distance_km': 2.045680921842421}
+{'index': 14744, 'reason': 'zero_travel_time', 'train_number': '54233', 'day': '1', 'from_station': 'LC', 'to_station': 'ASH', 'travel_time_seconds': 0.0, 'distance_km': 2.5504726070493353}
+{'index': 14745, 'reason': 'zero_travel_time', 'train_number': '54233', 'day': '1', 'from_station': 'ASH', 'to_station': 'LJN', 'travel_time_seconds': 0.0, 'distance_km': 1.0757678095824148}
+{'index': 14746, 'reason': 'zero_travel_time', 'train_number': '54233', 'day': '1', 'from_station': 'LJN', 'to_station': 'LKO', 'travel_time_seconds': 0.0, 'distance_km': 0.6805328245067724}
+{'index': 14918, 'reason': 'zero_travel_time', 'train_number': '15201', 'day': '1', 'from_station': 'MKI', 'to_station': 'BMKI', 'travel_time_seconds': 0.0, 'distance_km': 0.024015813995498937}
+{'index': 15096, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'SSPR', 'to_station': 'DNDL', 'travel_time_seconds': 0.0, 'distance_km': 3.791466925658724}
+{'index': 15098, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'DNKL', 'to_station': 'SCPR', 'travel_time_seconds': 0.0, 'distance_km': 4.65040303404554}
+{'index': 15099, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'SCPR', 'to_station': 'JRZ', 'travel_time_seconds': 0.0, 'distance_km': 3.2853450090567105}
+{'index': 15101, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'RJGR', 'to_station': 'RQP', 'travel_time_seconds': 0.0, 'distance_km': 2.2457712088209827}
+{'index': 15102, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'RQP', 'to_station': 'GHNH', 'travel_time_seconds': 0.0, 'distance_km': 5.773752242845209}
+{'index': 15103, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'GHNH', 'to_station': 'SPSR', 'travel_time_seconds': 0.0, 'distance_km': 3.246897764508049}
+{'index': 15104, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'SPSR', 'to_station': 'NQR', 'travel_time_seconds': 0.0, 'distance_km': 4.453258411864905}
+{'index': 15106, 'reason': 'zero_travel_time', 'train_number': '58421', 'day': '1', 'from_station': 'BRAG', 'to_station': 'GBK', 'travel_time_seconds': 0.0, 'distance_km': 5.91024566090038}
+
+ZERO TRAVEL TIME RECORDS
+---------------------------------------------------------------------------
+Count: 3,226
+
+SPEED > 250 KM/H
+---------------------------------------------------------------------------
+Count: 1,055
+
+TRAVEL TIME > 12 HOURS
+---------------------------------------------------------------------------
+Count: 512
+
+STATION DISTANCE > 200 KM
+---------------------------------------------------------------------------
+Count: 8
+
+===========================================================================

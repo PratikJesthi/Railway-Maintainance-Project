@@ -1,0 +1,46 @@
+======================================================================
+RAILOPT-AI — FINAL MOVEMENT CLEANING REPORT
+======================================================================
+
+Total movements          : 386,819
+Clean movements          : 383,242
+Invalid movements        : 3,577
+Missing coordinates      : 3,122
+Speed statistical flags  : 1,901
+Distance statistical flags: 1,907
+
+======================================================================
+RETENTION
+======================================================================
+Retained for modeling : 99.08%
+Removed as invalid   : 0.92%
+
+======================================================================
+SPEED STATISTICS
+======================================================================
+Minimum : 0.01 km/h
+Median  : 58.85 km/h
+P95     : 98.38 km/h
+P99     : 158.50 km/h
+P99.5   : 206.00 km/h
+P99.9   : 410.36 km/h
+Maximum : 1068.12 km/h
+
+======================================================================
+DISTANCE STATISTICS
+======================================================================
+Minimum : 0.001 km
+Median  : 6.583 km
+P95     : 12.846 km
+P99     : 17.115 km
+P99.5   : 19.993 km
+Maximum : 425.692 km
+
+======================================================================
+OUTPUT
+======================================================================
+Classified dataset : processed/train_movements_classified.parquet
+Trusted dataset    : processed/trusted_movements.parquet
+Report             : audit/final_cleaning_report.txt
+
+======================================================================

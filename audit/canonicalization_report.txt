@@ -1,0 +1,49 @@
+===========================================================================
+RAILOPT-AI — CANONICALIZATION REPORT
+===========================================================================
+
+DATASET COUNTS
+---------------------------------------------------------------------------
+Stations          : 8,990
+Train routes      : 5,208
+Train stops       : 417,080
+Train movements   : 386,819
+Quality issues    : 767
+
+JOURNEY STATISTICS
+---------------------------------------------------------------------------
+Train/day journeys : 7,700
+Minimum stops      : 1
+Maximum stops      : 257
+Average stops      : 51.24
+
+MOVEMENT STATISTICS
+---------------------------------------------------------------------------
+Movements with valid travel time : 386,567
+Minimum travel time              : 0 sec
+Maximum travel time              : 117,300 sec
+Average travel time              : 603.18 sec
+
+QUALITY ISSUES
+---------------------------------------------------------------------------
+invalid_coordinates                           293
+negative_dwell_time                           121
+journey_has_less_than_two_stops               111
+negative_travel_time                          83
+missing_station_code                          51
+missing_destination_station                   50
+destination_coordinates_missing               50
+missing_origin_station                        49
+origin_coordinates_missing                    49
+insufficient_route_geometry                   9
+missing_station_name                          1
+
+OUTPUT FILES
+---------------------------------------------------------------------------
+processed/stations.parquet
+processed/trains.parquet
+processed/train_stops.parquet
+processed/train_movements.parquet
+processed/data_quality.parquet
+
+===========================================================================

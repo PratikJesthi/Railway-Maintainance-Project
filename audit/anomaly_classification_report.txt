@@ -1,0 +1,30 @@
+======================================================================
+TRAIN MOVEMENT ANOMALY CLASSIFICATION REPORT
+======================================================================
+
+Total movements       : 386,819
+Total anomalies       : 7,505
+Anomaly percentage    : 1.94%
+
+ANOMALY TYPES
+----------------------------------------------------------------------
+NORMAL                    :  379,314 (98.06%)
+INVALID_TRAVEL_TIME       :    3,478 (0.90%)
+MISSING_COORDINATES       :    2,964 (0.77%)
+HIGH_SPEED                :    1,055 (0.27%)
+ZERO_DISTANCE             :        8 (0.00%)
+
+SPEED STATISTICS
+----------------------------------------------------------------------
+Minimum speed        : 0.00 km/h
+Maximum speed        : 1068.12 km/h
+Average speed        : 60.69 km/h
+Median speed         : 58.85 km/h
+95th percentile      : 98.38 km/h
+
+OUTPUT
+----------------------------------------------------------------------
+Dataset              : processed/train_movements_classified.parquet
+Report               : audit/anomaly_classification_report.txt
+
+======================================================================

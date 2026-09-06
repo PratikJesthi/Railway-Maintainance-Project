@@ -1,0 +1,62 @@
+========================================================================
+RAILOPT-AI — SYNTHETIC DATA GENERATION REPORT
+========================================================================
+
+SOURCE DATA
+------------------------------------------------------------------------
+Trusted movement records : 376,928
+Source journeys          : 7,448
+
+SYNTHETIC DATA
+------------------------------------------------------------------------
+Scenarios generated      : 5,000
+Disruptions generated    : 5,000
+Synthetic movements      : 251,727
+
+DISRUPTION DISTRIBUTION
+------------------------------------------------------------------------
+TRAIN_DELAY                      1,547  ( 30.94%)
+STATION_DELAY                      956  ( 19.12%)
+TRACK_RESTRICTION                  809  ( 16.18%)
+SPEED_RESTRICTION                  704  ( 14.08%)
+BLOCKAGE                           508  ( 10.16%)
+TRAIN_CANCELLATION                 476  (  9.52%)
+
+SEVERITY DISTRIBUTION
+------------------------------------------------------------------------
+LOW                              1,960  ( 39.20%)
+MEDIUM                           1,298  ( 25.96%)
+RESTRICTED                         704  ( 14.08%)
+HIGH                               562  ( 11.24%)
+CANCELLATION                       476  (  9.52%)
+
+REPRODUCIBILITY
+------------------------------------------------------------------------
+Random seed              : 26027
+
+DATA MODEL
+------------------------------------------------------------------------
+Each scenario contains:
+  • baseline timetable
+  • disruption type
+  • disruption severity
+  • affected movement
+  • synthetic delay
+  • speed restriction factor
+  • cancellation state
+  • propagated downstream delay
+
+GROUND TRUTH
+------------------------------------------------------------------------
+Ground-truth disruption labels are available.
+Optimal rescheduling actions are intentionally
+left empty until the optimization engine is built.
+
+OUTPUT FILES
+------------------------------------------------------------------------
+Synthetic movements : synthetic_v1/synthetic_movements.parquet
+Scenarios           : synthetic_v1/synthetic_scenarios.parquet
+Disruptions         : synthetic_v1/synthetic_disruptions.parquet
+Ground truth        : synthetic_v1/synthetic_ground_truth.parquet
+
+========================================================================
