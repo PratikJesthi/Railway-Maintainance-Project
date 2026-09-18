@@ -32,6 +32,26 @@ def detect_conflicts(session: Session, new_block: models.Block) -> list[models.B
     return hits
 
 
+def recompute_section_conflicts(session: Session, sec: str) -> list[models.Block]:
+    """Re-derive conflict=True/False for every block in a section from
+    scratch. Call this after moving a block (PATCH start) so a block that
+    no longer overlaps anything gets its flag cleared, mirroring the
+    original dashboard's post-drag clash recheck."""
+    section_blocks = session.exec(select(models.Block).where(models.Block.sec == sec)).all()
+    changed = []
+    for b in section_blocks:
+        clash = any(overlaps(b, x) for x in section_blocks if x.id != b.id)
+        if b.conflict != clash:
+            b.conflict = clash
+            session.add(b)
+            changed.append(b)
+    if changed:
+        session.commit()
+        for b in changed:
+            session.refresh(b)
+    return section_blocks
+
+
 # The demo dataset ships exactly one pre-built conflict (C-1: B-301 vs
 # B-302 on AGC–GWL) that the Conflict Resolution screen is designed
 # around — this mirrors AppContext.jsx's hardcoded resolveConflict().

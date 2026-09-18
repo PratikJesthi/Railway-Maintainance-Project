@@ -38,14 +38,15 @@ class BlockCreate(BaseModel):
 
 
 class BlockUpdate(BaseModel):
-    st: Optional[Literal["Scheduled", "Pending", "In Progress"]] = None
+    st: Optional[Literal["Scheduled", "Pending", "In Progress", "Completed", "Rescheduled"]] = None
     start: Optional[float] = None
     dur: Optional[float] = None
     note: Optional[str] = None
     sev: Optional[Literal["Critical", "High", "Medium", "Low"]] = None
-    # who/why for the audit trail this update writes
+    # who/why/what-label for the audit trail this update writes
     by: Optional[str] = None
     reason: Optional[str] = None
+    action: Optional[str] = None  # audit action label, e.g. "WHAT-IF APPLIED" — defaults to "MANUAL OVERRIDE"
 
 
 class BlockCreateResult(BaseModel):

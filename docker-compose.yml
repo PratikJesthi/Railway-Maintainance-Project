@@ -1,13 +1,17 @@
 services:
 
   backend:
-    build: ./sanchalan-backend
+    build:
+      context: ./sanchalan-backend
+    container_name: sanchalan-backend
     ports:
       - "8000:8000"
 
   frontend:
-    build: ./sanchalan-abp-dashboard
+    build:
+      context: ./sanchalan-abp-dashboard
+    container_name: sanchalan-frontend
     ports:
-      - "5173:5173"
+      - "5173:80"
     depends_on:
       - backend

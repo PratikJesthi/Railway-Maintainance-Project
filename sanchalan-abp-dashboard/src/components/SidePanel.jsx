@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp, SCREENS } from '../context/AppContext.jsx';
+import { fmtWindow } from '../utils.js';
 
 function Row({ k, v }) {
   return (
@@ -11,10 +12,16 @@ function Row({ k, v }) {
 }
 
 export default function SidePanel() {
-  const { panelBlock, setPanelBlock, setScreen, depts: DEPTS } = useApp();
+  const { panelBlock, setPanelBlock, setScreen, depts: DEPTS, approveBlock, overrideBlock } = useApp();
   const open = !!panelBlock;
   const b = panelBlock;
   const dept = b ? DEPTS[b.dept] : null;
+
+  const handleOverride = () => {
+    const reason = window.prompt(`Reason for override of ${b.id} (mandatory per SOP):`);
+    if (!reason) return; // overrideBlock itself toasts the cancellation if called with empty reason, but skip the call entirely here to avoid a prompt-cancel toast
+    overrideBlock(b, reason);
+  };
 
   return (
     <>
@@ -56,27 +63,47 @@ export default function SidePanel() {
                 <Row k="Defect" v={b.defect} />
                 <Row k="Severity" v={b.sev} />
                 <Row k="Overdue" v={`${b.overdue} days`} />
-                <Row k="Window" v={`${Math.round(b.start)}h → ${Math.round(b.start + b.dur)}h (wk)`} />
+                <Row k="Window" v={fmtWindow(b.start, b.dur)} />
                 <Row k="Status" v={b.st} />
                 <Row k="Source system" v={b.src} />
               </div>
+
+              {b.conflict && (
+                <div className="mt-3 text-[11.5px] px-3 py-2 rounded-md" style={{ background: '#FBEAE7', color: '#BB4430' }}>
+                  ⚠ Overlaps {b.id === 'B-301' ? 'B-302' : b.id === 'B-302' ? 'B-301' : 'another block'} on this section — unresolved
+                </div>
+              )}
 
               <div className="mt-3 text-[11.5px] text-ink-500 leading-relaxed border-l-2 border-cream-300 pl-3">
                 {b.note}
               </div>
 
-              {b.conflict && (
+              <div className="mt-4 flex flex-wrap gap-2">
                 <button
-                  onClick={() => {
-                    setScreen('conflict');
-                    setPanelBlock(null);
-                  }}
-                  className="mt-4 w-full bg-dept-alert text-white text-[12px] font-medium py-2 rounded-md hover:opacity-90"
-                  style={{ background: '#BB4430' }}
+                  onClick={() => approveBlock(b)}
+                  className="flex-1 bg-cyan-600 text-white text-[12px] font-medium py-2 rounded-md hover:bg-cyan-700"
                 >
-                  Review conflict →
+                  Approve
                 </button>
-              )}
+                {b.conflict && (
+                  <button
+                    onClick={() => {
+                      setScreen('conflict');
+                      setPanelBlock(null);
+                    }}
+                    className="flex-1 text-white text-[12px] font-medium py-2 rounded-md hover:opacity-90"
+                    style={{ background: '#BB4430' }}
+                  >
+                    Resolve conflict →
+                  </button>
+                )}
+                <button
+                  onClick={handleOverride}
+                  className="flex-1 border border-cream-300 text-ink-700 text-[12px] font-medium py-2 rounded-md hover:bg-cream-100"
+                >
+                  Override
+                </button>
+              </div>
             </div>
           </>
         )}

@@ -6,7 +6,7 @@ from sqlmodel import Session, select
 from .. import models
 from ..database import get_session
 from ..schemas import BlockCreate, BlockCreateResult, BlockRead, BlockUpdate
-from ..services.conflict_service import detect_conflicts
+from ..services.conflict_service import detect_conflicts, recompute_section_conflicts
 from ..services.ops import log_audit, push_feed
 
 router = APIRouter(prefix="/api/blocks", tags=["blocks"])
@@ -73,7 +73,7 @@ async def update_block(block_id: str, payload: BlockUpdate, session: Session = D
     if not block:
         raise HTTPException(404, f"Block '{block_id}' not found")
 
-    changes = payload.model_dump(exclude={"by", "reason"}, exclude_unset=True)
+    changes = payload.model_dump(exclude={"by", "reason", "action"}, exclude_unset=True)
     if not changes:
         return block
 
@@ -84,9 +84,14 @@ async def update_block(block_id: str, payload: BlockUpdate, session: Session = D
     session.commit()
     session.refresh(block)
 
+    if "start" in changes:
+        recompute_section_conflicts(session, block.sec)
+        session.refresh(block)
+
     diff = ", ".join(f"{k}: {before[k]} → {v}" for k, v in changes.items())
     detail = payload.reason or f"{block_id} updated ({diff})"
-    await log_audit(session, "MANUAL OVERRIDE", detail, payload.by or "Control User")  # entry, feed_event (unused)
+    action = payload.action or "MANUAL OVERRIDE"
+    await log_audit(session, action, detail, payload.by or "Control User")  # (entry, feed_event) unused — delivered over the websocket
 
     return block
 

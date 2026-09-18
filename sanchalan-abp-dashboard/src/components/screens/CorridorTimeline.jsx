@@ -1,16 +1,67 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import Card from '../ui/Card.jsx';
 
 const ZOOMS = { day: { hours: 24, label: 'Day' }, week: { hours: 168, label: 'Week' }, month: { hours: 168 * 4, label: 'Month' } };
 
 export default function CorridorTimeline() {
-  const { blocks, sections: SECTIONS, depts: DEPTS, setPanelBlock, nowH } = useApp();
+  const { blocks, sections: SECTIONS, depts: DEPTS, setPanelBlock, nowH, sandbox, previewScenario } = useApp();
   const [zoom, setZoom] = useState('week');
   const totalHours = ZOOMS[zoom].hours;
   const colCount = zoom === 'day' ? 24 : zoom === 'week' ? 7 : 4;
   const colLabel = (i) =>
     zoom === 'day' ? `${i}:00` : zoom === 'week' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i] : `Wk ${i + 1}`;
+
+  const barRefs = useRef({}); // block id -> DOM node, used for direct-manipulation drag
+  const justDraggedRef = useRef(false); // suppresses the click that follows a drag's pointerup
+
+  const handlePointerDown = (e, b) => {
+    if (!sandbox) return;
+    e.stopPropagation();
+    const el = barRefs.current[b.id];
+    if (!el) return;
+    const track = el.parentElement;
+    const trackWidth = track.clientWidth;
+    const startX = e.clientX;
+    const origStart = b.start;
+    const dur = b.dur;
+    let moved = false;
+    let newStart = origStart;
+
+    try {
+      el.setPointerCapture(e.pointerId);
+    } catch (_) {
+      /* not all browsers support this on every element */
+    }
+    el.classList.add('opacity-90', 'shadow-lg', 'cursor-grabbing', 'z-10', 'border', 'border-dashed', 'border-white');
+
+    const onMove = (ev) => {
+      const dx = ev.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      const dh = (dx / trackWidth) * totalHours;
+      newStart = Math.round(Math.min(totalHours - dur, Math.max(0, origStart + dh)));
+      el.style.left = `${(newStart / totalHours) * 100}%`;
+    };
+    const onUp = () => {
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+      el.classList.remove('opacity-90', 'shadow-lg', 'cursor-grabbing', 'z-10', 'border', 'border-dashed', 'border-white');
+      if (!moved) return; // treat as a plain click — onClick below opens the side panel
+      el.style.left = `${(origStart / totalHours) * 100}%`; // snap back; the real move only happens on "Apply scenario"
+      justDraggedRef.current = true;
+      previewScenario(b, newStart);
+    };
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onUp);
+  };
+
+  const handleBarClick = (b) => {
+    if (justDraggedRef.current) {
+      justDraggedRef.current = false;
+      return;
+    }
+    setPanelBlock(b);
+  };
 
   return (
     <div className="screen-enter">
@@ -19,6 +70,11 @@ export default function CorridorTimeline() {
           <span className="text-[12.5px] font-semibold text-ink-900">
             Corridor Timeline — NDLS → BPL
           </span>
+          {sandbox && (
+            <span className="ml-3 text-[10px] font-bold tracking-wide px-2 py-0.5 rounded bg-amber-200 text-amber-900">
+              SANDBOX · drag a block
+            </span>
+          )}
           <div className="ml-auto flex bg-cream-100 border border-cream-300 rounded-md p-0.5">
             {Object.entries(ZOOMS).map(([key, z]) => (
               <button
@@ -95,8 +151,15 @@ export default function CorridorTimeline() {
                         return (
                           <button
                             key={b.id}
-                            onClick={() => setPanelBlock(b)}
-                            className="absolute top-[9px] h-[26px] rounded flex items-center gap-1 px-2 text-[10px] font-semibold overflow-hidden whitespace-nowrap hover:-translate-y-0.5 hover:shadow-soft transition-transform"
+                            ref={(el) => {
+                              barRefs.current[b.id] = el;
+                            }}
+                            onPointerDown={(e) => handlePointerDown(e, b)}
+                            onClick={() => handleBarClick(b)}
+                            className={
+                              'absolute top-[9px] h-[26px] rounded flex items-center gap-1 px-2 text-[10px] font-semibold overflow-hidden whitespace-nowrap select-none touch-none transition-transform hover:-translate-y-0.5 hover:shadow-soft ' +
+                              (sandbox ? 'cursor-grab' : 'cursor-pointer')
+                            }
                             style={{
                               left: `${Math.max(0, left)}%`,
                               width: `${Math.max(1.2, width)}%`,
@@ -105,7 +168,7 @@ export default function CorridorTimeline() {
                                 : dept.color,
                               color: '#FBF6EA',
                             }}
-                            title={`${b.id} · ${b.defect}`}
+                            title={`${b.id} · ${b.defect}${sandbox ? ' — drag to reschedule' : ''}`}
                           >
                             <span className="truncate">{b.id}</span>
                           </button>

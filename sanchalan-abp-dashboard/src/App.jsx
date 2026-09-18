@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar.jsx';
 import Topbar from './components/Topbar.jsx';
 import Toast from './components/Toast.jsx';
 import SidePanel from './components/SidePanel.jsx';
+import ScenarioBar from './components/ScenarioBar.jsx';
 import CommandCentre from './components/screens/CommandCentre.jsx';
 import CorridorTimeline from './components/screens/CorridorTimeline.jsx';
 import PriorityQueue from './components/screens/PriorityQueue.jsx';
@@ -34,6 +35,7 @@ export default function App() {
         </div>
       </main>
       <SidePanel />
+      <ScenarioBar />
       <Toast />
     </div>
   );
