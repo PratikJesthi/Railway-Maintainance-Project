@@ -14,6 +14,13 @@ class Settings(BaseSettings):
     feed_default_limit: int = 12  # matches AppContext's .slice(0, 12)
     now_h: float = 10.7           # matches NOW_H in opsData.js (sim clock, Mon 00:00 = 0)
 
+    secret_key: str = "change-me-in-.env"     # SANCHALAN_SECRET_KEY in production
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 480
+
+    # Redis — used for pub-sub (Phase 3+) and caching; app works without it
+    redis_url: str = "redis://localhost:6379/0"
+
     class Config:
         env_file = ".env"
         env_prefix = "SANCHALAN_"

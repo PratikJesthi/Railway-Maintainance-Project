@@ -3,6 +3,27 @@ from typing import Literal, Optional
 from pydantic import BaseModel, Field
 
 
+# ---------- Auth ----------
+
+class LoginRequest(BaseModel):
+    employee_id: str
+    password: str
+
+
+class UserOut(BaseModel):
+    id: int
+    employee_id: str
+    name: str
+    role: str
+    departments: list[str]
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserOut
+
+
 # ---------- Blocks ----------
 
 class BlockRead(BaseModel):

@@ -1,11 +1,66 @@
 services:
 
+  # ─────────────────────────────────────────────
+  # PostgreSQL — standby (default: SQLite is used)
+  # To activate: set SANCHALAN_DATABASE_URL in backend env or host .env
+  # ─────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: sanchalan-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sanchalan
+      POSTGRES_USER: sanchalan
+      POSTGRES_PASSWORD: sanchalan
+    ports:
+      # 5432 is taken by the native PostgreSQL on this machine — container
+      # listens on 5433 on the host (still 5432 inside the container network)
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sanchalan -d sanchalan"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────────
+  # Redis — standby (wired but idle until Phase 3/5 pub-sub)
+  # ─────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: sanchalan-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────────
+  # Backend — keep SQLite default; override env vars to use Postgres/Redis
+  # ─────────────────────────────────────────────
   backend:
     build:
       context: ./sanchalan-backend
     container_name: sanchalan-backend
     ports:
       - "8000:8000"
+    environment:
+      # SQLite default — override to switch to Postgres:
+      # SANCHALAN_DATABASE_URL: postgresql://sanchalan:sanchalan@postgres:5432/sanchalan
+      SANCHALAN_DATABASE_URL: ${SANCHALAN_DATABASE_URL:-sqlite:///./sanchalan.db}
+      SANCHALAN_REDIS_URL: ${SANCHALAN_REDIS_URL:-redis://redis:6379/0}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   frontend:
     build:
@@ -15,3 +70,7 @@ services:
       - "5173:80"
     depends_on:
       - backend
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -2,3 +2,13 @@ fastapi==0.115.0
 uvicorn[standard]==0.30.6
 sqlmodel==0.0.22
 pydantic-settings==2.5.2
+passlib[bcrypt]
+bcrypt==4.0.1
+python-jose[cryptography]
+python-multipart
+pandas==2.2.3
+pyarrow==17.0.0
+# PostgreSQL driver (binary wheel — no libpq-dev required)
+psycopg2-binary>=2.9.9
+# Redis client (sync + async)
+redis>=5.0.0

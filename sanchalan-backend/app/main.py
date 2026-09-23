@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .database import init_db
-from .routers import audit, blocks, bootstrap, conflicts, feed, kpis, meta, queue, reports, ws
+from .routers import audit, auth, blocks, bootstrap, conflicts, feed, kpis, meta, queue, reports, ws
 
 
 @asynccontextmanager
@@ -29,6 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(meta.router)
 app.include_router(blocks.router)
 app.include_router(queue.router)

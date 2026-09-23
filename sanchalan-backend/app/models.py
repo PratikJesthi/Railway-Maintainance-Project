@@ -1,7 +1,28 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
+
+
+class UserDepartment(SQLModel, table=True):
+    """Join table — a controller/approver can span multiple departments; a requester usually has one."""
+
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id", primary_key=True)
+    dept: str = Field(primary_key=True)   # dept code: ENG / TRAC / SNT — no separate Department table yet
+
+
+class User(SQLModel, table=True):
+    """Login account. role: requester | controller | approver | viewer (see README in the auth patch)."""
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    employee_id: str = Field(unique=True, index=True)
+    name: str
+    hashed_password: str
+    role: str = "requester"
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    departments: list[UserDepartment] = Relationship()
 
 
 class Block(SQLModel, table=True):
@@ -23,8 +44,8 @@ class Block(SQLModel, table=True):
     st: str = "Scheduled"                        # Scheduled / Pending / In Progress
     note: str = ""
     conflict: bool = False                       # true while it overlaps another block
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class QueueItem(SQLModel, table=True):
@@ -56,7 +77,7 @@ class FeedEvent(SQLModel, table=True):
     time: str                                    # "HH:MM" display string
     color: str                                    # hex color for the feed dot
     text: str
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), index=True)
 
 
 class AuditEntry(SQLModel, table=True):
@@ -68,4 +89,4 @@ class AuditEntry(SQLModel, table=True):
     action: str
     detail: str
     type: str = "ok"                              # "ok" | "warn"
-    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), index=True)
