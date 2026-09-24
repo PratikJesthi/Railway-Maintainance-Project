@@ -10,6 +10,32 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class RegisterRequest(BaseModel):
+    employee_id: str
+    name: str
+    password: str
+    role: str = "requester"  # requester | controller | approver | viewer
+    departments: list[str] = ["ENG"]
+
+
+class ForgotPasswordRequest(BaseModel):
+    employee_id: str
+
+
+class ResetPasswordRequest(BaseModel):
+    employee_id: str
+    reset_token: str
+    new_password: str
+
+
+class ForgotPasswordResponse(BaseModel):
+    message: str
+
+
+class MessageResponse(BaseModel):
+    message: str
+
+
 class UserOut(BaseModel):
     id: int
     employee_id: str
@@ -206,3 +232,62 @@ class BootstrapResponse(BaseModel):
     kpis: list[KPIRead]
     now_h: float
     resolved: bool
+
+
+# ---------- Optimizer / CP-SAT ----------
+
+class OptimizerRequest(BaseModel):
+    """Request to run the CP-SAT conflict optimizer on a section.
+
+    Provide either `sec` (runs on all conflict-flagged blocks in that
+    section) or an explicit `block_ids` list.  If both are given, block_ids
+    takes precedence.
+    """
+    sec: Optional[str] = None
+    block_ids: Optional[list[str]] = None
+
+
+class MergeProposalOut(BaseModel):
+    """Pre-step merge suggestion returned when two conflicting blocks
+    from different departments fit inside the merge-window threshold."""
+    block_a_id: str
+    block_b_id: str
+    dept_a: str
+    dept_b: str
+    merged_start: float
+    merged_dur: float
+    rationale: str
+
+
+class ScheduledBlockOut(BaseModel):
+    """One block's solver-recommended placement."""
+    block_id: str
+    sec: str
+    dept: str
+    original_start: float
+    scheduled_start: float
+    scheduled_end: float
+    dur: float
+    priority_score: float
+    delay_hours: float
+    sev: str
+    defect: str
+
+
+class SectionOptimizerOut(BaseModel):
+    """Full optimizer result for a section.
+
+    status values:
+      OPTIMAL        — solver found the globally minimum-tardiness schedule.
+      FEASIBLE       — solver hit the time limit but found a valid schedule.
+      INFEASIBLE     — no non-overlapping schedule exists (escalate manually).
+      MERGE_OFFERED  — merge pre-check triggered; merge proposal is populated
+                       instead of a full solver schedule.
+    """
+    sec: str
+    status: str
+    merge_proposal: Optional[MergeProposalOut] = None
+    scheduled: list[ScheduledBlockOut] = []
+    solver_wall_seconds: float = 0.0
+    rationale: str
+

@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useApp, SCREENS } from '../context/AppContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Topbar() {
-  const { screen, aiMode, setAiMode, sandbox, toggleSandbox, simRunning, startSim } = useApp();
+  const {
+    screen, aiMode, setAiMode,
+    sandbox, toggleSandbox,
+    simRunning, startSimulation,
+    horizon, changeHorizon,
+  } = useApp();
+  const { user, logout } = useAuth();
   const [clock, setClock] = useState(new Date().toLocaleTimeString('en-IN', { hour12: false }));
 
   useEffect(() => {
@@ -21,7 +28,7 @@ export default function Topbar() {
 
       <div className="ml-auto flex items-center gap-3">
         <div className="flex items-center gap-2 text-[11.5px] text-ink-500">
-          <span className={!aiMode ? 'font-semibold text-ink-900' : ''}>Manual baseline</span>
+          <span className={!aiMode ? 'font-semibold text-ink-900' : ''}>Manual</span>
           <button
             onClick={() => setAiMode((v) => !v)}
             aria-label="Toggle AI planning mode"
@@ -37,41 +44,73 @@ export default function Topbar() {
               }
             />
           </button>
-          <span className={aiMode ? 'font-semibold text-cyan-700' : ''}>AI-optimised plan</span>
+          <span className={aiMode ? 'font-semibold text-cyan-700' : ''}>AI-optimised</span>
         </div>
 
         <button
           onClick={toggleSandbox}
-          disabled={simRunning}
           className={
-            'text-[11.5px] font-medium px-3 py-1.5 rounded-md border transition-colors disabled:opacity-40 disabled:cursor-not-allowed ' +
+            'text-[11px] font-medium px-3 py-1.5 rounded-md border ' +
             (sandbox
-              ? 'bg-amber-100 border-amber-300 text-amber-800'
-              : 'bg-cream-100 border-cream-300 text-ink-700 hover:bg-cream-200')
+              ? 'bg-cyan-600 border-cyan-700 text-white'
+              : 'bg-cream-50 border-cream-300 text-ink-700 hover:bg-cream-200')
           }
         >
-          {sandbox ? 'Exit sandbox' : 'What-if…'}
+          {sandbox ? '🧪 Exit sandbox' : 'What-if…'}
         </button>
 
         <button
-          onClick={startSim}
+          onClick={startSimulation}
           disabled={simRunning}
-          className="text-[11.5px] font-medium px-3 py-1.5 rounded-md bg-cream-100 border border-cream-300 text-ink-700 hover:bg-cream-200 disabled:opacity-60 disabled:cursor-wait"
+          className="text-[11px] font-medium px-3 py-1.5 rounded-md border bg-cream-50 border-cream-300 text-ink-700 hover:bg-cream-200 disabled:opacity-55 disabled:cursor-not-allowed"
         >
           {simRunning ? '⏩ Simulating…' : '▶ Simulate 24h'}
         </button>
 
         {sandbox && (
-          <button
+          <span
             onClick={toggleSandbox}
             title="Click to exit"
-            className="text-[10px] font-bold tracking-wide px-2 py-1 rounded bg-amber-200 text-amber-900"
+            className="text-[10px] font-semibold tracking-wide px-2 py-1 rounded cursor-pointer"
+            style={{ background: '#FBF1DE', color: '#8A6120' }}
           >
             SANDBOX · drag a block
-          </button>
+          </span>
         )}
 
-        <div className="num text-[11.5px] text-ink-500 border-l border-cream-300 pl-4">{clock} IST</div>
+        <div className="flex bg-cream-100 border border-cream-300 rounded-md p-0.5">
+          {['weekly', 'monthly'].map((h) => (
+            <button
+              key={h}
+              onClick={() => changeHorizon(h)}
+              className={
+                'text-[11px] font-medium px-3 py-1 rounded capitalize ' +
+                (horizon === h ? 'bg-cream-50 text-ink-900 shadow-soft' : 'text-ink-500 hover:text-ink-900')
+              }
+            >
+              {h}
+            </button>
+          ))}
+        </div>
+
+        <div className="num text-[11.5px] text-ink-500 border-l border-cream-300 pl-3">{clock} IST</div>
+
+        {user && (
+          <div className="flex items-center gap-2 border-l border-cream-300 pl-3">
+            <span className="text-[11px] text-ink-700 text-right leading-tight">
+              <span className="block font-medium">{user.name}</span>
+              <span className="block text-[9.5px] text-ink-500 uppercase tracking-wide">
+                {user.role} · {user.departments.join('/')}
+              </span>
+            </span>
+            <button
+              onClick={logout}
+              className="text-[10.5px] font-medium bg-cream-100 border border-cream-300 px-2.5 py-1.5 rounded-md hover:bg-cream-200"
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );

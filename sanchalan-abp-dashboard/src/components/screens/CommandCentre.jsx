@@ -1,5 +1,6 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext.jsx';
+import { SECTIONS } from '../../data/opsData';
 import Card from '../ui/Card.jsx';
 
 function KpiCard({ k, aiMode }) {
@@ -25,7 +26,7 @@ function utilFor(sec, blocks) {
 }
 
 export default function CommandCentre() {
-  const { aiMode, blocks, feed, kpis, sections, setScreen } = useApp();
+  const { aiMode, blocks, feed, kpis, setScreen } = useApp();
   const hasConflict = blocks.some((b) => b.conflict);
 
   return (
@@ -64,7 +65,7 @@ export default function CommandCentre() {
             <span className="ml-auto text-[11px] text-ink-500">block-hours / available hours</span>
           </div>
           <div className="p-4 space-y-3">
-            {sections.map((sec) => {
+            {SECTIONS.map((sec) => {
               const pct = utilFor(sec, blocks);
               return (
                 <div key={sec}>
@@ -87,14 +88,14 @@ export default function CommandCentre() {
         <Card>
           <div className="px-4 py-3 border-b border-cream-200 flex items-center">
             <span className="text-[12.5px] font-semibold text-ink-900">Live Ops Feed</span>
-            <span className="ml-auto text-[11px] text-ink-500">simulated push</span>
+            <span className="ml-auto text-[11px] text-ink-500">live · websocket</span>
           </div>
           <div className="max-h-[340px] overflow-y-auto">
             {feed.map((f, i) => (
               <div key={i} className="flex gap-2.5 px-4 py-2.5 border-b border-cream-200 text-[11.5px] items-start">
-                <span className="num text-ink-500 text-[10px] pt-0.5 whitespace-nowrap">{f.time}</span>
-                <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: f.color }} />
-                <span className="text-ink-700">{f.text}</span>
+                <span className="num text-ink-500 text-[10px] pt-0.5 whitespace-nowrap">{f[0]}</span>
+                <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: f[1] }} />
+                <span className="text-ink-700">{f[2]}</span>
               </div>
             ))}
           </div>

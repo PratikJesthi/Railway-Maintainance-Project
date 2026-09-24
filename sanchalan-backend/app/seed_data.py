@@ -92,3 +92,42 @@ COMPLIANCE_BY_DEPT = [
     {"dept": "S&T", "value": 94},
     {"dept": "BDMS-flagged", "value": 78},
 ]
+
+INITIAL_USERS = [
+    {
+        "employee_id": "SR-DEN-01",
+        "name": "Rajesh Sharma",
+        "password": "password123",
+        "role": "approver",
+        "departments": ["ENG", "TRAC", "SNT"],
+    },
+    {
+        "employee_id": "CONTROLLER-01",
+        "name": "Anita Verma",
+        "password": "password123",
+        "role": "controller",
+        "departments": ["ENG", "TRAC", "SNT"],
+    },
+    {
+        "employee_id": "ENG-101",
+        "name": "Sunil Kumar",
+        "password": "password123",
+        "role": "requester",
+        "departments": ["ENG"],
+    },
+    {
+        "employee_id": "TRAC-101",
+        "name": "Vikram Singh",
+        "password": "password123",
+        "role": "requester",
+        "departments": ["TRAC"],
+    },
+    {
+        "employee_id": "SNT-101",
+        "name": "Priya Das",
+        "password": "password123",
+        "role": "requester",
+        "departments": ["SNT"],
+    },
+]
+

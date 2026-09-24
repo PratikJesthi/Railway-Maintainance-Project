@@ -3,7 +3,10 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     app_name: str = "SANCHALAN ABP API"
-    database_url: str = "sqlite:///./sanchalan.db"
+    # Database URLs (PostgreSQL as primary, SQLite as fallback/standby)
+    database_url: str = "postgresql://sanchalan:sanchalan@localhost:5433/sanchalan"
+    fallback_database_url: str = "sqlite:///./sanchalan.db"
+
     # Vite dev server + common local frontend ports
     cors_origins: list[str] = [
         "http://localhost:5173",
@@ -18,7 +21,7 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 480
 
-    # Redis — used for pub-sub (Phase 3+) and caching; app works without it
+    # Redis — primary caching & pub-sub; app degrades gracefully if down
     redis_url: str = "redis://localhost:6379/0"
 
     class Config:

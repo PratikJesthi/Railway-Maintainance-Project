@@ -1,36 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { useApp } from '../../context/AppContext.jsx';
-import { DEPTS } from '../../data/opsData';
+import { apiJson } from '../../api/client.js';
 import Card from '../ui/Card.jsx';
-
-const UTIL_DATA = [
-  { dept: 'Engg.', value: 78 },
-  { dept: 'Traction', value: 64 },
-  { dept: 'S&T', value: 71 },
-  { dept: 'Combined', value: 88 },
-];
-
-const BACKLOG_TREND = Array.from({ length: 14 }, (_, i) => ({
-  week: `W${i + 1}`,
-  backlog: Math.round(210 - i * 6 + Math.sin(i) * 10),
-}));
-
-const COMPLIANCE = [
-  { dept: 'Engg.', value: 91 },
-  { dept: 'Traction', value: 86 },
-  { dept: 'S&T', value: 94 },
-  { dept: 'BDMS-flagged', value: 78 },
-];
-
-const RP_KPIS = [
-  { label: 'Blocks planned this month', value: '412' },
-  { label: 'Avg. possession utilisation', value: '81%' },
-  { label: 'SLA-breach incidents', value: '6' },
-  { label: 'Conflicts auto-resolved', value: '63' },
-];
 
 function download(filename, text) {
   const el = document.createElement('a');
@@ -41,14 +15,38 @@ function download(filename, text) {
 
 export default function Reports() {
   const { showToast } = useApp();
+  const [utilData, setUtilData] = useState([]);
+  const [backlogTrend, setBacklogTrend] = useState([]);
+  const [compliance, setCompliance] = useState([]);
+  const [rpKpis, setRpKpis] = useState([]);
 
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      apiJson('/api/reports/utilization'),
+      apiJson('/api/reports/backlog-trend'),
+      apiJson('/api/reports/compliance'),
+      apiJson('/api/reports/summary'),
+    ]).then(([util, backlog, comp, summary]) => {
+      if (cancelled) return;
+      setUtilData(util);
+      setBacklogTrend(backlog);
+      setCompliance(comp);
+      setRpKpis(summary);
+    }).catch((err) => showToast(`✗ Reports failed to load: ${err.message}`));
+    return () => { cancelled = true; };
+  }, [showToast]);
+
+  // Client-side export from the already-fetched data — the backend also
+  // exposes /api/reports/export/*.csv directly if you'd rather link to
+  // those instead (equivalent content, one fewer round trip either way).
   const exportSummary = () => {
-    const csv = 'department,utilisation_pct\n' + UTIL_DATA.map((d) => `${d.dept},${d.value}`).join('\n');
+    const csv = 'department,utilisation_pct\n' + utilData.map((d) => `${d.dept},${d.value}`).join('\n');
     download('sanchalan_summary.csv', csv);
     showToast('⬇ sanchalan_summary.csv downloaded');
   };
   const exportBacklog = () => {
-    const csv = 'week,backlog\n' + BACKLOG_TREND.map((d) => `${d.week},${d.backlog}`).join('\n');
+    const csv = 'week,backlog\n' + backlogTrend.map((d) => `${d.week},${d.backlog}`).join('\n');
     download('sanchalan_backlog_trend.csv', csv);
     showToast('⬇ sanchalan_backlog_trend.csv downloaded');
   };
@@ -56,7 +54,7 @@ export default function Reports() {
   return (
     <div className="screen-enter">
       <div className="grid grid-cols-4 gap-3.5 mb-3.5">
-        {RP_KPIS.map((k) => (
+        {rpKpis.map((k) => (
           <Card key={k.label} className="p-3.5">
             <div className="num text-[22px] font-semibold text-ink-900">{k.value}</div>
             <div className="text-[11px] text-ink-500 mt-1">{k.label}</div>
@@ -71,7 +69,7 @@ export default function Reports() {
           </div>
           <div className="p-3" style={{ height: 220 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={UTIL_DATA}>
+              <BarChart data={utilData}>
                 <CartesianGrid stroke="#F0E7CE" vertical={false} />
                 <XAxis dataKey="dept" tick={{ fontSize: 11, fill: '#7A7460' }} axisLine={{ stroke: '#E4D6AF' }} tickLine={false} />
                 <YAxis tick={{ fontSize: 11, fill: '#7A7460' }} axisLine={false} tickLine={false} />
@@ -89,7 +87,7 @@ export default function Reports() {
           </div>
           <div className="p-3" style={{ height: 220 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={BACKLOG_TREND}>
+              <LineChart data={backlogTrend}>
                 <CartesianGrid stroke="#F0E7CE" vertical={false} />
                 <XAxis dataKey="week" tick={{ fontSize: 10, fill: '#7A7460' }} axisLine={{ stroke: '#E4D6AF' }} tickLine={false} />
                 <YAxis tick={{ fontSize: 11, fill: '#7A7460' }} axisLine={false} tickLine={false} />
@@ -107,7 +105,7 @@ export default function Reports() {
           </div>
           <div className="p-3" style={{ height: 190 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={COMPLIANCE} layout="vertical" margin={{ left: 20 }}>
+              <BarChart data={compliance} layout="vertical" margin={{ left: 20 }}>
                 <CartesianGrid stroke="#F0E7CE" horizontal={false} />
                 <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: '#7A7460' }} axisLine={false} tickLine={false} />
                 <YAxis type="category" dataKey="dept" tick={{ fontSize: 11, fill: '#7A7460' }} axisLine={false} tickLine={false} width={90} />
