@@ -9,6 +9,7 @@ import SidePanel from './components/SidePanel.jsx';
 import ScenarioBar from './components/ScenarioBar.jsx';
 import CommandCentre from './components/screens/CommandCentre.jsx';
 import CorridorTimeline from './components/screens/CorridorTimeline.jsx';
+import TrainTimetable from './components/screens/TrainTimetable.jsx';
 import PriorityQueue from './components/screens/PriorityQueue.jsx';
 import ConflictResolution from './components/screens/ConflictResolution.jsx';
 import Reports from './components/screens/Reports.jsx';
@@ -17,6 +18,7 @@ import AuditLog from './components/screens/AuditLog.jsx';
 const SCREEN_COMPONENTS = {
   command: CommandCentre,
   timeline: CorridorTimeline,
+  timetable: TrainTimetable,
   queue: PriorityQueue,
   conflict: ConflictResolution,
   reports: Reports,

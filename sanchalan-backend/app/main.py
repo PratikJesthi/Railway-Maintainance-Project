@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .database import init_db
-from .routers import audit, auth, blocks, bootstrap, conflicts, feed, kpis, meta, queue, reports, ws
+from .routers import audit, auth, blocks, bootstrap, conflicts, feed, kpis, meta, queue, reports, trains, ws
 
 
 @asynccontextmanager
@@ -38,6 +38,7 @@ app.include_router(audit.router)
 app.include_router(kpis.router)
 app.include_router(reports.router)
 app.include_router(conflicts.router)
+app.include_router(trains.router)
 app.include_router(bootstrap.router)
 app.include_router(ws.router)
 

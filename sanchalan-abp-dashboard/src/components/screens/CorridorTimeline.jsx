@@ -21,7 +21,7 @@ export default function CorridorTimeline() {
     const el = barRefs.current[b.id];
     if (!el) return;
     const track = el.parentElement;
-    const trackWidth = track.clientWidth;
+    const trackWidth = track.clientWidth || 1;
     const startX = e.clientX;
     const origStart = b.start;
     const dur = b.dur;
@@ -30,29 +30,37 @@ export default function CorridorTimeline() {
 
     try {
       el.setPointerCapture(e.pointerId);
-    } catch (_) {
-      /* not all browsers support this on every element */
-    }
+    } catch (_) {}
+
     el.classList.add('opacity-90', 'shadow-lg', 'cursor-grabbing', 'z-10', 'border', 'border-dashed', 'border-white');
 
     const onMove = (ev) => {
       const dx = ev.clientX - startX;
-      if (Math.abs(dx) > 4) moved = true;
+      if (Math.abs(dx) > 3) moved = true;
       const dh = (dx / trackWidth) * totalHours;
       newStart = Math.round(Math.min(totalHours - dur, Math.max(0, origStart + dh)));
       el.style.left = `${(newStart / totalHours) * 100}%`;
     };
-    const onUp = () => {
-      el.removeEventListener('pointermove', onMove);
-      el.removeEventListener('pointerup', onUp);
+
+    const onUp = (ev) => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+      window.removeEventListener('pointercancel', onUp);
+      try {
+        if (el.hasPointerCapture && el.hasPointerCapture(ev.pointerId)) {
+          el.releasePointerCapture(ev.pointerId);
+        }
+      } catch (_) {}
       el.classList.remove('opacity-90', 'shadow-lg', 'cursor-grabbing', 'z-10', 'border', 'border-dashed', 'border-white');
-      if (!moved) return; // treat as a plain click — onClick below opens the side panel
-      el.style.left = `${(origStart / totalHours) * 100}%`; // snap back; the real move only happens on "Apply scenario"
+      el.style.left = `${(origStart / totalHours) * 100}%`;
+      if (!moved) return;
       justDraggedRef.current = true;
       previewScenario(b, newStart);
     };
-    el.addEventListener('pointermove', onMove);
-    el.addEventListener('pointerup', onUp);
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
+    window.addEventListener('pointercancel', onUp);
   };
 
   const handleBarClick = (b) => {

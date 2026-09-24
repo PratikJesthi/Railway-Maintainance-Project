@@ -1,16 +1,26 @@
+// Helper to format fractional hours into HH:MM string
+function fmtHourMin(hFloat) {
+  const norm = ((hFloat % 24) + 24) % 24;
+  let hh = Math.floor(norm);
+  let mm = Math.round((norm - hh) * 60);
+  if (mm >= 60) {
+    hh = (hh + 1) % 24;
+    mm = 0;
+  }
+  return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+}
+
 // Formats an hour offset (from Monday 00:00 of the planning week) into a
-// human-readable window, e.g. "Wed 04:00 → Wed 16:00". Ported from the
-// original vanilla dashboard's fmtWindow().
+// human-readable window, e.g. "Wed 04:00 → Wed 16:00" or "Mon 08:30 → Mon 10:00".
 export function fmtWindow(s, dur) {
   if (s > 168) {
-    return `Sep ${Math.floor(s / 24)}, ${String(s % 24).padStart(2, '0')}:00 (+ ${(dur / 24).toFixed(1)}d)`;
+    const dayOfMonth = Math.floor(s / 24);
+    return `Sep ${dayOfMonth}, ${fmtHourMin(s)} (+ ${(dur / 24).toFixed(1)}d)`;
   }
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const d = Math.floor(s / 24);
-  const h = s % 24;
+  const d = Math.min(6, Math.max(0, Math.floor(s / 24)));
   const e = s + dur;
-  const ed = Math.floor(e / 24);
-  const eh = e % 24;
-  const p = (n) => (n < 10 ? '0' : '') + n;
-  return `${days[d]} ${p(h)}:00 → ${days[Math.min(ed, 6)]} ${p(eh)}:00`;
+  const ed = Math.min(6, Math.max(0, Math.floor(e / 24)));
+
+  return `${days[d]} ${fmtHourMin(s)} → ${days[ed]} ${fmtHourMin(e)}`;
 }

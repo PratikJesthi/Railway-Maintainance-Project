@@ -90,3 +90,51 @@ class AuditEntry(SQLModel, table=True):
     detail: str
     type: str = "ok"                              # "ok" | "warn"
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), index=True)
+
+
+# ---------------------------------------------------------------------------
+# Timetable — Train, Station, TrainSectionPass
+# ---------------------------------------------------------------------------
+
+class Station(SQLModel, table=True):
+    """A railway station on the corridor."""
+
+    code: str = Field(primary_key=True)           # e.g. "NDLS"
+    name: str                                      # e.g. "New Delhi"
+    zone: str = "NR"                               # Railway zone
+    state: str = ""
+    lat: Optional[float] = None
+    lon: Optional[float] = None
+
+
+class Train(SQLModel, table=True):
+    """A scheduled train service on the corridor."""
+
+    number: str = Field(primary_key=True)          # e.g. "12002"
+    name: str                                       # e.g. "Bhopal Shatabdi"
+    train_type: str = "EXP"                        # EXP / PASS / MEMU / DEMU / RAJ / SF
+    from_code: str                                  # origin station code
+    to_code: str                                    # destination station code
+    from_name: str = ""
+    to_name: str = ""
+    zone: str = "NR"
+    distance_km: int = 0
+    duration_h: int = 0
+
+
+class TrainSectionPass(SQLModel, table=True):
+    """Records that `train_number` passes through corridor section `sec`
+    with its window starting at `pass_start_h` (hours from Mon 00:00)
+    and lasting `pass_dur_h` hours.
+
+    This is what makes the ScenarioBar real: for a given Block, we query
+    TrainSectionPass where sec==block.sec and windows overlap to get the
+    real affected-train count instead of the guessed `conflictIds*14`.
+    """
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    train_number: str = Field(index=True, foreign_key="train.number")
+    sec: str = Field(index=True)                   # corridor section, e.g. "NDLS–MTJ"
+    pass_start_h: float                            # hour the train enters the section (Mon 00:00 base)
+    pass_dur_h: float = 1.0                        # hours the train occupies the section
+    day: int = 1                                   # planning week day (1=Mon … 7=Sun)

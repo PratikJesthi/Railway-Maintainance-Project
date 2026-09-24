@@ -9,6 +9,7 @@ const AppCtx = createContext(null);
 export const SCREENS = {
   command: { id: 'command', title: 'Command Centre', subtitle: 'System-wide KPIs · Week 37', hindi: 'नियंत्रण केंद्र' },
   timeline: { id: 'timeline', title: 'Corridor Timeline', subtitle: 'NDLS → BPL · possession plan', hindi: 'समय-सारणी' },
+  timetable: { id: 'timetable', title: 'Train Timetable', subtitle: 'Section passes & path-hold schedules', hindi: 'ट्रेन समय-सारणी' },
   queue: { id: 'queue', title: 'Priority Queue', subtitle: 'ML-ranked · transparent scoring', hindi: 'प्राथमिकता सूची' },
   conflict: { id: 'conflict', title: 'Conflict Resolution', subtitle: 'Multi-department coordination', hindi: 'विवाद समाधान' },
   reports: { id: 'reports', title: 'Reports & Horizon Planning', subtitle: 'Weekly ops ↔ monthly planning', hindi: 'रिपोर्ट एवं योजना' },
@@ -215,8 +216,29 @@ export function AppProvider({ children }) {
   }, [simRunning, showToast]);
 
   const previewScenario = useCallback((block, newStart) => {
-    setScenario({ id: block.id, sec: block.sec, dept: block.dept, dur: block.dur, origStart: block.start, newStart });
-  }, []);
+    const secBlocks = blocks.filter((b) => b.sec === block.sec && b.id !== block.id);
+    const origEnd = block.start + block.dur;
+    const origConflicts = secBlocks.filter((b) => block.start < b.start + b.dur && origEnd > b.start);
+
+    const newEnd = newStart + block.dur;
+    const newConflicts = secBlocks.filter((b) => newStart < b.start + b.dur && newEnd > b.start);
+
+    const conflictIds = newConflicts.map((b) => b.id);
+    const delta = newConflicts.length - origConflicts.length;
+    const delayH = newStart - block.start;
+
+    setScenario({
+      id: block.id,
+      sec: block.sec,
+      dept: block.dept,
+      dur: block.dur,
+      origStart: block.start,
+      newStart,
+      delayH,
+      conflictIds,
+      delta,
+    });
+  }, [blocks]);
 
   const discardScenario = useCallback((silent) => {
     setScenario(null);

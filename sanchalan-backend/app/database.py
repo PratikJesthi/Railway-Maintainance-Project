@@ -57,6 +57,9 @@ def _seed_engine(engine) -> None:
         INITIAL_BLOCKS,
         INITIAL_FEED,
         INITIAL_QUEUE,
+        INITIAL_STATIONS,
+        INITIAL_TRAIN_PASSES,
+        INITIAL_TRAINS,
         INITIAL_USERS,
     )
 
@@ -83,6 +86,18 @@ def _seed_engine(engine) -> None:
 
             already_seeded = session.exec(select(models.Block)).first() is not None
             if already_seeded:
+                # Still seed timetable tables if they are empty (added later)
+                if session.exec(select(models.Station)).first() is None:
+                    for row in INITIAL_STATIONS:
+                        session.add(models.Station(**row))
+                    for row in INITIAL_TRAINS:
+                        session.add(models.Train(**row))
+                    session.commit()
+                    for row in INITIAL_TRAIN_PASSES:
+                        session.add(models.TrainSectionPass(**row))
+                    session.commit()
+                    log.info("Seeded timetable tables (stations=%d, trains=%d, passes=%d)",
+                             len(INITIAL_STATIONS), len(INITIAL_TRAINS), len(INITIAL_TRAIN_PASSES))
                 return
 
             for row in INITIAL_BLOCKS:
@@ -95,6 +110,15 @@ def _seed_engine(engine) -> None:
                 ("10:00", "System", "DB SEEDED", f"Seeded database via {engine.dialect.name}", "ok")
             ]:
                 session.add(models.AuditEntry(t=time_val, by=by_val, action=act, detail=det, type=typ))
+
+            # Seed timetable data
+            for row in INITIAL_STATIONS:
+                session.add(models.Station(**row))
+            for row in INITIAL_TRAINS:
+                session.add(models.Train(**row))
+            session.commit()
+            for row in INITIAL_TRAIN_PASSES:
+                session.add(models.TrainSectionPass(**row))
 
             session.commit()
             log.info("Successfully initialized & seeded database engine (%s)", engine.url)

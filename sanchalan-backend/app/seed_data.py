@@ -131,3 +131,84 @@ INITIAL_USERS = [
     },
 ]
 
+
+
+# ---------------------------------------------------------------------------
+# Timetable seed data — Trains, Stations, TrainSectionPasses
+# Derived from samples/train_sample.json + schedule_sample.json.
+# ---------------------------------------------------------------------------
+
+INITIAL_STATIONS = [
+    {"code": "NDLS", "name": "New Delhi",    "zone": "NR",  "state": "Delhi",          "lat": 28.6420, "lon": 77.2197},
+    {"code": "MTJ",  "name": "Mathura Jn",   "zone": "NCR", "state": "Uttar Pradesh",  "lat": 27.4938, "lon": 77.6750},
+    {"code": "AGC",  "name": "Agra Cantt",   "zone": "NCR", "state": "Uttar Pradesh",  "lat": 27.1592, "lon": 78.0480},
+    {"code": "GWL",  "name": "Gwalior",      "zone": "NCR", "state": "Madhya Pradesh", "lat": 26.2183, "lon": 78.1828},
+    {"code": "JHS",  "name": "Jhansi Jn",    "zone": "NCR", "state": "Uttar Pradesh",  "lat": 25.4484, "lon": 78.5685},
+    {"code": "BPL",  "name": "Bhopal Jn",    "zone": "WCR", "state": "Madhya Pradesh", "lat": 23.2687, "lon": 77.4130},
+    {"code": "ET",   "name": "Itarsi Jn",    "zone": "WCR", "state": "Madhya Pradesh", "lat": 22.6128, "lon": 77.7620},
+]
+
+INITIAL_TRAINS = [
+    {"number": "12001", "name": "Bhopal Shatabdi",          "train_type": "SF",   "from_code": "NDLS", "to_code": "BPL",  "from_name": "New Delhi",  "to_name": "Bhopal Jn",  "zone": "NR",  "distance_km": 706, "duration_h": 8},
+    {"number": "12002", "name": "Bhopal Shatabdi (Return)", "train_type": "SF",   "from_code": "BPL",  "to_code": "NDLS", "from_name": "Bhopal Jn",  "to_name": "New Delhi",  "zone": "NR",  "distance_km": 706, "duration_h": 8},
+    {"number": "12627", "name": "Karnataka Express",        "train_type": "EXP",  "from_code": "NDLS", "to_code": "BPL",  "from_name": "New Delhi",  "to_name": "Bhopal Jn",  "zone": "NR",  "distance_km": 706, "duration_h": 11},
+    {"number": "12628", "name": "Karnataka Exp (Return)",   "train_type": "EXP",  "from_code": "BPL",  "to_code": "NDLS", "from_name": "Bhopal Jn",  "to_name": "New Delhi",  "zone": "SR",  "distance_km": 706, "duration_h": 11},
+    {"number": "12049", "name": "Gatimaan Express",         "train_type": "SF",   "from_code": "NDLS", "to_code": "AGC",  "from_name": "New Delhi",  "to_name": "Agra Cantt", "zone": "NR",  "distance_km": 188, "duration_h": 2},
+    {"number": "12050", "name": "Gatimaan Exp (Return)",    "train_type": "SF",   "from_code": "AGC",  "to_code": "NDLS", "from_name": "Agra Cantt", "to_name": "New Delhi",  "zone": "NR",  "distance_km": 188, "duration_h": 2},
+    {"number": "12919", "name": "Malwa Express",            "train_type": "EXP",  "from_code": "NDLS", "to_code": "BPL",  "from_name": "New Delhi",  "to_name": "Bhopal Jn",  "zone": "NR",  "distance_km": 706, "duration_h": 11},
+    {"number": "12920", "name": "Malwa Exp (Return)",       "train_type": "EXP",  "from_code": "BPL",  "to_code": "NDLS", "from_name": "Bhopal Jn",  "to_name": "New Delhi",  "zone": "WCR", "distance_km": 706, "duration_h": 11},
+    {"number": "11077", "name": "Jhelum Express",           "train_type": "EXP",  "from_code": "NDLS", "to_code": "JHS",  "from_name": "New Delhi",  "to_name": "Jhansi Jn",  "zone": "CR",  "distance_km": 418, "duration_h": 7},
+    {"number": "59386", "name": "NDLS-MTJ Passenger",       "train_type": "PASS", "from_code": "NDLS", "to_code": "MTJ",  "from_name": "New Delhi",  "to_name": "Mathura Jn", "zone": "NCR", "distance_km": 141, "duration_h": 3},
+    {"number": "64401", "name": "NDLS-MTJ MEMU",            "train_type": "MEMU", "from_code": "NDLS", "to_code": "MTJ",  "from_name": "New Delhi",  "to_name": "Mathura Jn", "zone": "NCR", "distance_km": 141, "duration_h": 2},
+    {"number": "54401", "name": "MTJ-AGC Passenger",        "train_type": "PASS", "from_code": "MTJ",  "to_code": "AGC",  "from_name": "Mathura Jn", "to_name": "Agra Cantt", "zone": "NCR", "distance_km": 57,  "duration_h": 2},
+]
+
+INITIAL_TRAIN_PASSES = [
+    # NDLS-MTJ (B-101: 6-16h, B-102: 30-38h)
+    {"train_number": "12001", "sec": "NDLS–MTJ", "pass_start_h": 6.5,  "pass_dur_h": 1.2, "day": 1},
+    {"train_number": "12627", "sec": "NDLS–MTJ", "pass_start_h": 8.0,  "pass_dur_h": 1.5, "day": 1},
+    {"train_number": "12919", "sec": "NDLS–MTJ", "pass_start_h": 10.0, "pass_dur_h": 1.5, "day": 1},
+    {"train_number": "12049", "sec": "NDLS–MTJ", "pass_start_h": 7.5,  "pass_dur_h": 1.0, "day": 1},
+    {"train_number": "59386", "sec": "NDLS–MTJ", "pass_start_h": 9.0,  "pass_dur_h": 3.0, "day": 1},
+    {"train_number": "64401", "sec": "NDLS–MTJ", "pass_start_h": 11.0, "pass_dur_h": 2.0, "day": 1},
+    {"train_number": "11077", "sec": "NDLS–MTJ", "pass_start_h": 14.5, "pass_dur_h": 1.2, "day": 1},
+    {"train_number": "12001", "sec": "NDLS–MTJ", "pass_start_h": 30.5, "pass_dur_h": 1.2, "day": 2},
+    {"train_number": "64401", "sec": "NDLS–MTJ", "pass_start_h": 31.0, "pass_dur_h": 2.0, "day": 2},
+    {"train_number": "59386", "sec": "NDLS–MTJ", "pass_start_h": 33.0, "pass_dur_h": 3.0, "day": 2},
+    # MTJ-AGC (B-103: 20-32h, B-104: 55-64h)
+    {"train_number": "12001", "sec": "MTJ–AGC", "pass_start_h": 21.0, "pass_dur_h": 0.8, "day": 1},
+    {"train_number": "12627", "sec": "MTJ–AGC", "pass_start_h": 22.5, "pass_dur_h": 1.0, "day": 1},
+    {"train_number": "12049", "sec": "MTJ–AGC", "pass_start_h": 21.5, "pass_dur_h": 0.7, "day": 1},
+    {"train_number": "54401", "sec": "MTJ–AGC", "pass_start_h": 25.0, "pass_dur_h": 2.0, "day": 2},
+    {"train_number": "12919", "sec": "MTJ–AGC", "pass_start_h": 56.0, "pass_dur_h": 1.0, "day": 3},
+    {"train_number": "12627", "sec": "MTJ–AGC", "pass_start_h": 58.0, "pass_dur_h": 1.0, "day": 3},
+    {"train_number": "12001", "sec": "MTJ–AGC", "pass_start_h": 60.5, "pass_dur_h": 0.8, "day": 3},
+    # AGC-GWL (B-105: 8-14h, B-301: 52-64h, B-302: 58-70h)
+    {"train_number": "12001", "sec": "AGC–GWL", "pass_start_h": 8.5,  "pass_dur_h": 1.5, "day": 1},
+    {"train_number": "12627", "sec": "AGC–GWL", "pass_start_h": 10.0, "pass_dur_h": 2.0, "day": 1},
+    {"train_number": "12001", "sec": "AGC–GWL", "pass_start_h": 54.0, "pass_dur_h": 1.5, "day": 3},
+    {"train_number": "12919", "sec": "AGC–GWL", "pass_start_h": 56.5, "pass_dur_h": 2.0, "day": 3},
+    {"train_number": "11077", "sec": "AGC–GWL", "pass_start_h": 59.0, "pass_dur_h": 2.5, "day": 3},
+    {"train_number": "12627", "sec": "AGC–GWL", "pass_start_h": 62.0, "pass_dur_h": 2.0, "day": 3},
+    # GWL-JHS (B-106: 70-84h, B-107: 90-98h)
+    {"train_number": "12001", "sec": "GWL–JHS", "pass_start_h": 71.0, "pass_dur_h": 1.5, "day": 3},
+    {"train_number": "12627", "sec": "GWL–JHS", "pass_start_h": 73.0, "pass_dur_h": 2.0, "day": 3},
+    {"train_number": "11077", "sec": "GWL–JHS", "pass_start_h": 75.0, "pass_dur_h": 2.5, "day": 3},
+    {"train_number": "12919", "sec": "GWL–JHS", "pass_start_h": 78.5, "pass_dur_h": 2.0, "day": 4},
+    {"train_number": "12001", "sec": "GWL–JHS", "pass_start_h": 91.0, "pass_dur_h": 1.5, "day": 4},
+    {"train_number": "12628", "sec": "GWL–JHS", "pass_start_h": 93.0, "pass_dur_h": 1.5, "day": 4},
+    # JHS-BPL (B-108: 24-34h, B-109: 48-64h)
+    {"train_number": "12001", "sec": "JHS–BPL", "pass_start_h": 25.0, "pass_dur_h": 3.5, "day": 2},
+    {"train_number": "12919", "sec": "JHS–BPL", "pass_start_h": 27.5, "pass_dur_h": 3.5, "day": 2},
+    {"train_number": "12627", "sec": "JHS–BPL", "pass_start_h": 30.0, "pass_dur_h": 3.5, "day": 2},
+    {"train_number": "12002", "sec": "JHS–BPL", "pass_start_h": 49.0, "pass_dur_h": 3.5, "day": 3},
+    {"train_number": "12920", "sec": "JHS–BPL", "pass_start_h": 52.5, "pass_dur_h": 3.5, "day": 3},
+    {"train_number": "12628", "sec": "JHS–BPL", "pass_start_h": 56.0, "pass_dur_h": 3.5, "day": 3},
+    {"train_number": "12001", "sec": "JHS–BPL", "pass_start_h": 60.5, "pass_dur_h": 3.5, "day": 3},
+    # BPL-ET (B-110: 80-90h, B-111: 105-117h)
+    {"train_number": "12001", "sec": "BPL–ET", "pass_start_h": 81.0,  "pass_dur_h": 1.2, "day": 4},
+    {"train_number": "12002", "sec": "BPL–ET", "pass_start_h": 83.5,  "pass_dur_h": 1.2, "day": 4},
+    {"train_number": "12919", "sec": "BPL–ET", "pass_start_h": 86.0,  "pass_dur_h": 1.2, "day": 4},
+    {"train_number": "12002", "sec": "BPL–ET", "pass_start_h": 106.0, "pass_dur_h": 1.2, "day": 5},
+    {"train_number": "12920", "sec": "BPL–ET", "pass_start_h": 108.5, "pass_dur_h": 1.2, "day": 5},
+]

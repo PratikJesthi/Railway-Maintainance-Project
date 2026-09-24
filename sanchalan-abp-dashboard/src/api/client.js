@@ -44,3 +44,17 @@ export function wsUrl() {
 }
 
 export { BASE };
+
+export const api = {
+  get: (path, options) => apiJson(path, { ...options, method: 'GET' }),
+  post: (path, body, options) => apiJson(path, { ...options, method: 'POST', body: JSON.stringify(body) }),
+  patch: (path, body, options) => apiJson(path, { ...options, method: 'PATCH', body: JSON.stringify(body) }),
+  delete: (path, options) => apiJson(path, { ...options, method: 'DELETE' }),
+};
+
+apiJson.get = api.get;
+apiJson.post = api.post;
+apiJson.patch = api.patch;
+apiJson.delete = api.delete;
+
+export default apiJson;

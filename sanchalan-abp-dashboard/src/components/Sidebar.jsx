@@ -8,6 +8,9 @@ const ICONS = {
   timeline: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 6h18M3 12h12M3 18h18" /><circle cx="17" cy="12" r="2" /></svg>
   ),
+  timetable: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 4h16v16H4z" /><path d="M4 9h16M9 4v16" /></svg>
+  ),
   queue: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 6h16M4 12h10M4 18h7" /></svg>
   ),

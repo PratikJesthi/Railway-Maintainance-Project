@@ -291,3 +291,84 @@ class SectionOptimizerOut(BaseModel):
     solver_wall_seconds: float = 0.0
     rationale: str
 
+
+# ---------- Trains & Timetable ----------
+
+class StationRead(BaseModel):
+    code: str
+    name: str
+    zone: str
+    state: str
+    lat: Optional[float] = None
+    lon: Optional[float] = None
+
+    class Config:
+        from_attributes = True
+
+
+class TrainRead(BaseModel):
+    number: str
+    name: str
+    train_type: str
+    from_code: str
+    to_code: str
+    from_name: str
+    to_name: str
+    zone: str
+    distance_km: int
+    duration_h: int
+
+    class Config:
+        from_attributes = True
+
+
+class TrainSectionPassRead(BaseModel):
+    id: Optional[int]
+    train_number: str
+    sec: str
+    pass_start_h: float
+    pass_dur_h: float
+    day: int
+
+    class Config:
+        from_attributes = True
+
+
+class AffectedTrainEntry(BaseModel):
+    train_number: str
+    train_name: str
+    train_type: str
+    from_name: str
+    to_name: str
+    pass_start_h: float
+    pass_dur_h: float
+    overlap_h: float
+
+
+class AffectedTrainsResponse(BaseModel):
+    """Real affected-train count for a Block — replaces the guessed estimate."""
+    block_id: str
+    sec: str
+    block_start_h: float
+    block_end_h: float
+    affected_count: int
+    trains: list[AffectedTrainEntry]
+
+
+class TimetableRow(BaseModel):
+    id: Optional[int]
+    train_number: str
+    train_name: str
+    train_type: str
+    from_name: str
+    to_name: str
+    sec: str
+    pass_start_h: float
+    pass_dur_h: float
+    day: int
+
+
+class TimetableResponse(BaseModel):
+    sections: list[str]
+    rows: list[TimetableRow]
+
