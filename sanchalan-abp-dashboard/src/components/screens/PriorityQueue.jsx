@@ -13,15 +13,32 @@ export default function PriorityQueue() {
   const { queue, depts: DEPTS, setScreen, setPanelBlock, blocks } = useApp();
   const [dept, setDept] = useState('');
   const [status, setStatus] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [expandedId, setExpandedId] = useState(null);
 
   const rows = useMemo(() => {
     return queue
-      .filter((q) => !dept || DEPTS[q.dept].name === dept)
-      .filter((q) => !status || q.st === status)
-      .map((q) => ({ ...q, total: q.sev + (q.ovd || 0) + (q.crit || 0) + (q.saf || 0) }))
+      .filter((q) => {
+        if (!dept) return true;
+        const dObj = DEPTS[q.dept];
+        return q.dept === dept || dObj?.code === dept || dObj?.name === dept || dObj?.short === dept;
+      })
+      .filter((q) => {
+        if (!status) return true;
+        return q.st === status;
+      })
+      .filter((q) => {
+        if (!searchQuery) return true;
+        const query = searchQuery.trim().toLowerCase();
+        const idMatch = String(q.id || '').toLowerCase().includes(query);
+        const secMatch = String(q.sec || '').toLowerCase().includes(query);
+        const srcMatch = String(q.src || '').toLowerCase().includes(query);
+        const whyMatch = String(q.why || '').toLowerCase().includes(query);
+        return idMatch || secMatch || srcMatch || whyMatch;
+      })
+      .map((q) => ({ ...q, total: (q.sev || 0) + (q.ovd || 0) + (q.crit || 0) + (q.saf || 0) }))
       .sort((a, b) => b.total - a.total);
-  }, [queue, dept, status]);
+  }, [queue, dept, status, searchQuery, DEPTS]);
 
   const toggleRow = (id) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -45,7 +62,7 @@ export default function PriorityQueue() {
         >
           <option value="">All departments</option>
           {Object.values(DEPTS).filter((d) => d.code !== 'Merged').map((d) => (
-            <option key={d.code}>{d.name}</option>
+            <option key={d.code} value={d.code}>{d.name} ({d.short})</option>
           ))}
         </select>
         <select
@@ -54,11 +71,28 @@ export default function PriorityQueue() {
           className="bg-cream-50 border border-cream-300 rounded-md text-[11.5px] px-2.5 py-1.5 font-medium text-ink-900"
         >
           <option value="">All statuses</option>
-          <option>Pending</option>
-          <option>Scheduled</option>
-          <option>In Progress</option>
-          <option>Completed</option>
+          <option value="Pending">Pending</option>
+          <option value="Scheduled">Scheduled</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
         </select>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search defect ID, section..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-cream-50 border border-cream-300 rounded-md text-[11.5px] pl-7 pr-3 py-1.5 w-52 text-ink-900 placeholder:text-ink-500/60 focus:outline-none focus:border-cyan-600"
+          />
+          <svg
+            className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-ink-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
         <span className="ml-auto text-[11px] text-ink-500 max-w-md text-right">
           ML priority score = severity + overdue + criticality + safety risk — fully transparent, no black box.
         </span>

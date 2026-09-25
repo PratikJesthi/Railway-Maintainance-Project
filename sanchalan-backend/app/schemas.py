@@ -205,7 +205,10 @@ class ConflictGroup(BaseModel):
 
 
 class ConflictResolveRequest(BaseModel):
-    conflict_id: str = "C-1"
+    conflict_id: Optional[str] = None  # label only (e.g. "C-1") — used in audit log
+    # Explicit block IDs to merge.  Caller must provide this so the endpoint
+    # doesn't have to rebuild the volatile C-N numbering independently.
+    block_ids: list[str] = []
     # "ai" (auto, AI-attributed), "accept" (human accepts the AI suggestion),
     # or any free-text override label — mirrors resolveConflict(method) in AppContext.jsx
     method: str = "accept"
@@ -216,8 +219,8 @@ class ConflictResolveResponse(BaseModel):
     resolved: bool
     message: str
     merged_block: Optional[BlockRead] = None
-    audit_entry: AuditEntryRead
-    feed_event: FeedEventRead
+    audit_entry: Optional[AuditEntryRead] = None
+    feed_event: Optional[FeedEventRead] = None
 
 
 # ---------- Bootstrap (single-call hydrate for AppContext) ----------
@@ -371,4 +374,13 @@ class TimetableRow(BaseModel):
 class TimetableResponse(BaseModel):
     sections: list[str]
     rows: list[TimetableRow]
+
+
+class CascadePredictionResponse(BaseModel):
+    delay_received_seconds: float
+    propagation_depth: int
+    is_root: bool
+    predicted_propagated_delay_seconds: float
+    predicted_propagated_delay_minutes: float
+    rationale: str
 

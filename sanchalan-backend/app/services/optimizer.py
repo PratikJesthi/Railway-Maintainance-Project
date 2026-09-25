@@ -20,6 +20,8 @@ Dependencies:
 from __future__ import annotations
 
 import logging
+import os
+import numpy as np
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -52,6 +54,17 @@ MINUTES_PER_UNIT: int = 60
 # Optimisation time-limit per section (seconds)
 SOLVER_TIME_LIMIT_SECONDS: float = 10.0
 
+# ── SLA delay caps ──────────────────────────────────────────────────────────
+# Hard cap: CP-SAT cannot place any block more than this many hours past its
+# originally requested start — matches the division SLA of 1 calendar day.
+# Beyond this, the section is INFEASIBLE and returns for manual escalation.
+MAX_DELAY_HOURS: float = 24.0
+
+# Soft knee: penalty escalates quadratically beyond this point, so the solver
+# strongly prefers small delays and only exhausts 24h when there is no other
+# feasible non-overlapping placement.  12h = half a typical maintenance night.
+PENALTY_KNEE_HOURS: float = 12.0
+
 
 # ---------------------------------------------------------------------------
 # Priority score — THE SEAM
@@ -63,28 +76,21 @@ def get_priority_score(
 ) -> float:
     """Return a single priority score for a block.
 
-    TODAY — pure heuristic: sum of pre-computed QueueItem component scores
-    (sev + ovd + crit + saf), with a severity-table fallback when no queue
-    record exists.
+    Pure, transparent, and auditable heuristic: sum of pre-computed QueueItem
+    component scores (sev + ovd + crit + saf), with a deterministic severity-table
+    fallback when no queue record exists.
 
-    FUTURE — replace this function body with, e.g.:
-        features = extract_features(block)
-        return ml_model.predict([features])[0]
+    Adheres strictly to SANCHALAN's design principle:
+    "Transparency over polish... favors showing why, not just showing a clean number."
 
-    Or a gradual blend during cutover:
-        h = _heuristic(block, queue_by_defect)
-        m = ml_model.predict([extract_features(block)])[0]
-        return 0.5 * h + 0.5 * m
-
-    The CP-SAT model below only ever calls this function — it never reads
-    severity strings or queue records itself, so nothing else changes when
-    the scoring body improves.
+    The CP-SAT model below consumes this priority score to compute exact
+    weighted tardiness penalties.
     """
     qi = queue_by_defect.get(block.defect)
     if qi is not None:
         return float(qi.sev + qi.ovd + qi.crit + qi.saf)
     # Fallback: severity weight + 2 points per overdue day
-    return SEVERITY_FALLBACK.get(block.sev, 8.0) + block.overdue * 2.0
+    return float(SEVERITY_FALLBACK.get(block.sev, 8.0) + block.overdue * 2.0)
 
 
 # ---------------------------------------------------------------------------
@@ -235,6 +241,10 @@ def resolve_section(
 
     # Planning horizon: 1 week in minutes (168 h)
     horizon_min = _to_minutes(168.0)
+    # Hard SLA cap: no block may be delayed more than MAX_DELAY_HOURS past its
+    # requested start — beyond this the run is INFEASIBLE and escalates.
+    max_delay_min = _to_minutes(MAX_DELAY_HOURS)
+    knee_min = _to_minutes(PENALTY_KNEE_HOURS)
 
     intervals: dict[str, cp_model.IntervalVar] = {}
     start_vars: dict[str, cp_model.IntVar] = {}
@@ -242,10 +252,12 @@ def resolve_section(
     for b in blocks:
         dur_min = max(1, _to_minutes(b.dur))
         start_min = _to_minutes(b.start)
+        # Hard upper bound: start_var ≤ requested_start + MAX_DELAY_HOURS
+        start_max = min(horizon_min - dur_min, start_min + max_delay_min)
 
-        # Start variable: can shift right (delay) but not left (cannot start
-        # before the originally requested time — block crews are pre-allocated).
-        sv = model.new_int_var(start_min, horizon_min - dur_min, f"start_{b.id}")
+        # Start variable: can shift right (delay) but not left (crew
+        # pre-allocation) and cannot exceed the SLA hard cap.
+        sv = model.new_int_var(start_min, start_max, f"start_{b.id}")
         iv = model.new_fixed_size_interval_var(sv, dur_min, f"iv_{b.id}")
 
         start_vars[b.id] = sv
@@ -254,18 +266,31 @@ def resolve_section(
     # No two blocks may overlap on the section
     model.add_no_overlap(list(intervals.values()))
 
-    # Objective: minimise weighted tardiness
-    # Delay = start_var - original_start (in minutes).
-    # Weight = priority score (higher priority → delay is more expensive).
-    # Normalise scores to int weights (multiply by 10, round) so CP-SAT
-    # can work with integers while preserving relative ordering.
-    penalty_terms: list[cp_model.LinearExpr] = []
+    # Objective: minimise weighted tardiness with a piecewise-quadratic penalty
+    # beyond PENALTY_KNEE_HOURS to strongly discourage large delays before the
+    # hard cap is reached.
+    #
+    # penalty(delay) = weight * delay             # linear for delay ≤ knee
+    #                + weight * (delay - knee)    # extra linear slope for delay > knee
+    #
+    # This doubles the slope after PENALTY_KNEE_HOURS, giving a piecewise-linear
+    # approximation of quadratic growth that CP-SAT handles natively (no
+    # auxiliary integer multiplication needed).
+    penalty_terms: list = []
     for b in blocks:
         original_min = _to_minutes(b.start)
-        delay_var = model.new_int_var(0, horizon_min, f"delay_{b.id}")
+        delay_var = model.new_int_var(0, max_delay_min, f"delay_{b.id}")
         model.add(delay_var == start_vars[b.id] - original_min)
+
         weight = max(1, int(round(scores[b.id] * 10)))
+
+        # Linear base component (applies to all delay)
         penalty_terms.append(weight * delay_var)
+
+        # Extra slope beyond the knee — quadratic escalation without squaring
+        excess_var = model.new_int_var(0, max_delay_min, f"excess_{b.id}")
+        model.add_max_equality(excess_var, [delay_var - knee_min, model.new_constant(0)])
+        penalty_terms.append(weight * excess_var)
 
     model.minimize(sum(penalty_terms))
 

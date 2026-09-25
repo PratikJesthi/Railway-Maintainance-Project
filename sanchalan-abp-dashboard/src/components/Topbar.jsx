@@ -62,9 +62,14 @@ export default function Topbar() {
         <button
           onClick={startSimulation}
           disabled={simRunning}
-          className="text-[11px] font-medium px-3 py-1.5 rounded-md border bg-cream-50 border-cream-300 text-ink-700 hover:bg-cream-200 disabled:opacity-55 disabled:cursor-not-allowed"
+          className={
+            'text-[11px] font-medium px-3 py-1.5 rounded-md border flex items-center gap-1.5 transition-all ' +
+            (simRunning
+              ? 'bg-cream-200 border-cream-400 text-ink-900'
+              : 'bg-cream-50 border-cream-300 text-ink-700 hover:bg-cream-200')
+          }
         >
-          {simRunning ? '⏩ Simulating…' : '▶ Simulate 24h'}
+          {simRunning ? 'Simulating 24h…' : '▶ Simulate 24h'}
         </button>
 
         {sandbox && (

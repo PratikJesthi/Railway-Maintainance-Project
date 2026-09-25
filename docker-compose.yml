@@ -52,10 +52,11 @@ services:
     ports:
       - "8000:8000"
     environment:
-      # SQLite default — override to switch to Postgres:
-      # SANCHALAN_DATABASE_URL: postgresql://sanchalan:sanchalan@postgres:5432/sanchalan
-      SANCHALAN_DATABASE_URL: ${SANCHALAN_DATABASE_URL:-sqlite:///./sanchalan.db}
+      SANCHALAN_DATABASE_URL: postgresql://sanchalan:sanchalan@postgres:5432/sanchalan
       SANCHALAN_REDIS_URL: ${SANCHALAN_REDIS_URL:-redis://redis:6379/0}
+    volumes:
+      - ./sanchalan-backend:/app
+      - ./data:/app/data
     depends_on:
       postgres:
         condition: service_healthy

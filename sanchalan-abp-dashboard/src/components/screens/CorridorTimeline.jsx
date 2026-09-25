@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useApp } from '../../context/AppContext.jsx';
 import Card from '../ui/Card.jsx';
+import SimulationHUD from '../SimulationHUD.jsx';
 
 const ZOOMS = { day: { hours: 24, label: 'Day' }, week: { hours: 168, label: 'Week' }, month: { hours: 168 * 4, label: 'Month' } };
 
@@ -190,6 +191,7 @@ export default function CorridorTimeline() {
           </div>
         </div>
       </Card>
+      <SimulationHUD />
     </div>
   );
 }

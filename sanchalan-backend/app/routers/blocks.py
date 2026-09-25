@@ -8,6 +8,7 @@ from ..database import get_session
 from ..schemas import BlockCreate, BlockCreateResult, BlockRead, BlockUpdate
 from ..services.conflict_service import detect_conflicts, recompute_section_conflicts
 from ..services.ops import log_audit, push_feed
+from ..security import get_current_user
 
 router = APIRouter(prefix="/api/blocks", tags=["blocks"])
 
@@ -38,7 +39,11 @@ def get_block(block_id: str, session: Session = Depends(get_session)):
 
 
 @router.post("", response_model=BlockCreateResult, status_code=201)
-async def create_block(payload: BlockCreate, session: Session = Depends(get_session)):
+async def create_block(
+    payload: BlockCreate,
+    session: Session = Depends(get_session),
+    _user: models.User = Depends(get_current_user),
+):
     if session.get(models.Block, payload.id):
         raise HTTPException(409, f"Block '{payload.id}' already exists")
 
@@ -68,7 +73,12 @@ async def create_block(payload: BlockCreate, session: Session = Depends(get_sess
 
 
 @router.patch("/{block_id}", response_model=BlockRead)
-async def update_block(block_id: str, payload: BlockUpdate, session: Session = Depends(get_session)):
+async def update_block(
+    block_id: str,
+    payload: BlockUpdate,
+    session: Session = Depends(get_session),
+    _user: models.User = Depends(get_current_user),
+):
     block = session.get(models.Block, block_id)
     if not block:
         raise HTTPException(404, f"Block '{block_id}' not found")
@@ -97,7 +107,11 @@ async def update_block(block_id: str, payload: BlockUpdate, session: Session = D
 
 
 @router.delete("/{block_id}", status_code=204)
-def delete_block(block_id: str, session: Session = Depends(get_session)):
+def delete_block(
+    block_id: str,
+    session: Session = Depends(get_session),
+    _user: models.User = Depends(get_current_user),
+):
     block = session.get(models.Block, block_id)
     if not block:
         raise HTTPException(404, f"Block '{block_id}' not found")

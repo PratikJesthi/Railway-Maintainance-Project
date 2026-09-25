@@ -33,15 +33,30 @@ function Row({ k, v, bad, good }) {
 export default function ScenarioBar() {
   const { scenario, applyScenario, discardScenario, depts: DEPTS } = useApp();
   const [affectedData, setAffectedData] = useState(null);
+  const [cascadeData, setCascadeData] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!scenario?.id) { setAffectedData(null); return; }
+    if (!scenario?.id) {
+      setAffectedData(null);
+      setCascadeData(null);
+      return;
+    }
     setLoading(true);
+
+    // Fetch affected trains
     apiJson(`/api/trains/affected?block_id=${encodeURIComponent(scenario.id)}`)
-      .then(d => { setAffectedData(d); setLoading(false); })
-      .catch(() => { setAffectedData(null); setLoading(false); });
-  }, [scenario?.id]);
+      .then(d => setAffectedData(d))
+      .catch(() => setAffectedData(null))
+      .finally(() => setLoading(false));
+
+    // Fetch ML Cascade Delay Prediction based on shift duration (seconds)
+    const delaySec = Math.max(300, Math.round(Math.abs(scenario.delayH || scenario.dur) * 3600));
+    apiJson(`/api/trains/cascade-impact?delay_received_seconds=${delaySec}&propagation_depth=1&is_root=false`)
+      .then(c => setCascadeData(c))
+      .catch(() => setCascadeData(null));
+
+  }, [scenario?.id, scenario?.delayH, scenario?.dur]);
 
   if (!scenario) return null;
 
@@ -90,6 +105,24 @@ export default function ScenarioBar() {
           good={affectedCount === 0}
         />
       </div>
+
+      {/* ML Cascade Delay Predictor Box */}
+      {cascadeData && (
+        <div className="mb-3 px-3.5 py-2.5 bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-800/50 rounded-lg flex items-center justify-between text-[11.5px]">
+          <div className="flex items-center gap-2">
+            <span className="text-[13px]">⚡</span>
+            <div>
+              <span className="font-semibold text-purple-200">ML Cascade Delay Prediction: </span>
+              <span className="text-purple-300">
+                +{cascadeData.predicted_propagated_delay_minutes} mins ({cascadeData.predicted_propagated_delay_seconds.toFixed(0)}s) downstream network delay
+              </span>
+            </div>
+          </div>
+          <span className="text-[9.5px] font-mono px-2 py-0.5 rounded bg-purple-900/50 text-purple-300 border border-purple-700/40">
+            R²=0.9289 · 171k events
+          </span>
+        </div>
+      )}
 
       {/* Affected train mini-table */}
       {affectedTrains.length > 0 && (

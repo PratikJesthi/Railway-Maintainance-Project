@@ -14,3 +14,6 @@ psycopg2-binary>=2.9.9
 redis>=5.0.0
 # CP-SAT constraint solver (conflict optimizer)
 ortools>=9.9
+# Machine Learning model for priority scoring
+scikit-learn>=1.4.0
+lightgbm>=4.3.0
