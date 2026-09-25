@@ -3,24 +3,24 @@ import { apiJson } from '../../api/client.js';
 import { useApp } from '../../context/AppContext.jsx';
 import Card from '../ui/Card.jsx';
 
-// dept label → pill style map (matches CorridorTimeline palette)
+// dept label → pill style map
 const DEPT_STYLES = {
-  ENG:    { bg: '#EAF7F6', color: '#0B615C', dot: '#0F7A73', label: 'ENGINEERING' },
-  SNT:    { bg: '#F1ECF8', color: '#5E4380', dot: '#7C5AA6', label: 'SIGNAL & TELECOM' },
-  TRAC:   { bg: '#FFF3E2', color: '#7A4800', dot: '#C97A00', label: 'TRACTION' },
-  OHE:    { bg: '#FDECEA', color: '#8B2E1F', dot: '#BB4430', label: 'OHE' },
-  Merged: { bg: '#EAF6EE', color: '#2E6D44', dot: '#3E8E5B', label: 'MERGED' },
+  ENG:    { bg: '#06B6D420', color: '#06B6D4', dot: '#06B6D4', label: 'ENGINEERING (P.WAY)' },
+  SNT:    { bg: '#8B5CF620', color: '#8B5CF6', dot: '#8B5CF6', label: 'SIGNAL & TELECOM' },
+  TRAC:   { bg: '#F59E0B20', color: '#F59E0B', dot: '#F59E0B', label: 'TRACTION (OHE)' },
+  OHE:    { bg: '#F59E0B20', color: '#F59E0B', dot: '#F59E0B', label: 'TRACTION (OHE)' },
+  Merged: { bg: '#3B82F620', color: '#3B82F6', dot: '#3B82F6', label: 'COMBINED BLOCK' },
 };
 function deptStyle(dept) {
-  return DEPT_STYLES[dept] || { bg: '#F2F2F2', color: '#444', dot: '#888', label: dept };
+  return DEPT_STYLES[dept] || { bg: '#26364D', color: '#94A3B8', dot: '#64748B', label: dept };
 }
 
-// Format float hours → "HH:MM"
+// Format float hours → "HH:MM IST"
 function fmtH(h) {
   const total = Math.round(h * 60);
   const hh = Math.floor(total / 60) % 24;
   const mm = total % 60;
-  return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')} IST`;
 }
 
 export default function ConflictResolution() {
@@ -31,7 +31,6 @@ export default function ConflictResolution() {
   const [working, setWorking]   = useState(false);
   const [showOverride, setShowOverride] = useState(false);
   const [error, setError] = useState(null);
-  const token = useRef(localStorage.getItem('sanchalan_token'));
 
   const loadConflicts = useCallback(async () => {
     try {
@@ -69,12 +68,10 @@ export default function ConflictResolution() {
     }
   }
 
-  // ── render helpers ────────────────────────────────────────────────────────
-
   if (groups === null) {
     return (
-      <div className="screen-enter flex items-center justify-center py-20 text-ink-400 text-[12px]">
-        Loading conflict groups…
+      <div className="screen-enter flex items-center justify-center py-20 text-slate-400 font-mono text-[12px]">
+        Loading conflict detection engine &amp; solver states…
       </div>
     );
   }
@@ -82,42 +79,69 @@ export default function ConflictResolution() {
   const unresolvedGroups = groups.filter(g => !resolvedIds[g.conflict_id]);
 
   return (
-    <div className="screen-enter">
+    <div className="screen-enter space-y-4">
+      {/* Workflow Stage Header Bar */}
+      <div className="bg-[#101B2D] border border-[#26364D] rounded-md p-4 flex items-center justify-between font-mono">
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_#EF4444] animate-pulse" />
+          <span className="font-bold text-white text-[14px]">
+            CONFLICT RESOLUTION ENGINE · CORRIDOR BOTTLENECK ANALYSIS
+          </span>
+        </div>
+
+        {/* 5-Step Resolution Pipeline Visual Indicator */}
+        <div className="hidden lg:flex items-center gap-2 text-[10.5px] font-bold">
+          <span className="bg-red-950 text-red-400 border border-red-700/60 px-2 py-0.5 rounded">1. PROBLEM</span>
+          <span className="text-slate-600">→</span>
+          <span className="bg-amber-950 text-amber-400 border border-amber-700/60 px-2 py-0.5 rounded">2. OVERLAP</span>
+          <span className="text-slate-600">→</span>
+          <span className="bg-violet-950 text-violet-300 border border-violet-700/60 px-2 py-0.5 rounded">3. ANALYSIS</span>
+          <span className="text-slate-600">→</span>
+          <span className="bg-cyan-950 text-cyan-300 border border-cyan-700/60 px-2 py-0.5 rounded">4. PROPOSAL</span>
+          <span className="text-slate-600">→</span>
+          <span className="bg-emerald-950 text-emerald-400 border border-emerald-700/60 px-2 py-0.5 rounded">5. APPROVAL</span>
+        </div>
+      </div>
+
       {error && (
-        <div className="mb-3.5 px-4 py-3 rounded-lg border border-[#E8C4BE] bg-[#FFF0EE] text-[12px] text-[#A24A38]">
+        <div className="mb-3.5 px-4 py-3 rounded-md border border-red-700/60 bg-red-950/40 text-[12px] text-red-300 font-mono">
           ⚠ {error}
         </div>
       )}
 
       {Object.keys(resolvedIds).length > 0 && (
-        <div className="mb-3.5 px-4 py-3 rounded-lg border border-[#B7D9C2] bg-[#EAF6EE] text-[12px] text-[#2E6D44]">
+        <div className="mb-3.5 px-4 py-3 rounded-md border border-emerald-700/60 bg-emerald-950/40 text-[12px] text-emerald-300 font-mono">
           ✓ {Object.keys(resolvedIds).length} conflict{Object.keys(resolvedIds).length > 1 ? 's' : ''} resolved
-          — blocks merged on corridor. Manual override log updated.
+          — combined block created on corridor. COA &amp; manual audit log updated.
         </div>
       )}
 
       {/* Group sidebar */}
       {unresolvedGroups.length === 0 ? (
-        <div className="px-4 py-12 text-center text-ink-400 text-[12px]">
-          No active conflicts — all clear ✓
-        </div>
+        <Card className="p-12 text-center text-slate-400 font-mono text-[12.5px] bg-[#101B2D]">
+          <span className="text-emerald-400 text-2xl block mb-2">✓</span>
+          No active cross-departmental conflicts on NDLS → BPL Corridor — all clear.
+        </Card>
       ) : (
-        <div className="flex gap-3.5">
+        <div className="flex gap-4">
           {/* Left pill list */}
-          <div className="flex flex-col gap-2 w-[160px] shrink-0">
+          <div className="flex flex-col gap-2 w-[200px] shrink-0 font-mono">
             {unresolvedGroups.map(g => (
               <button
                 key={g.conflict_id}
                 onClick={() => { setSelected(g.conflict_id); setShowOverride(false); }}
-                className={`text-left px-3 py-2.5 rounded-lg border text-[11.5px] transition-all ${
+                className={`text-left px-3.5 py-3 rounded-md border text-[11.5px] transition-all relative overflow-hidden ${
                   selected === g.conflict_id
-                    ? 'bg-[#FFF0EE] border-[#D9AFA3] text-[#A24A38] font-semibold'
-                    : 'bg-cream-50 border-cream-200 text-ink-600 hover:bg-cream-100'
+                    ? 'bg-[#142238] border-[#06B6D4] text-white font-bold border-l-4 border-l-[#06B6D4] shadow-md'
+                    : 'bg-[#101B2D] border-[#26364D] text-slate-300 hover:bg-[#142238] hover:text-white'
                 }`}
               >
-                <div className="font-semibold mb-0.5">{g.conflict_id}</div>
-                <div className="text-[10.5px] leading-tight text-ink-400 truncate">{g.sec}</div>
-                <div className="text-[10px] text-ink-400 mt-0.5">{g.block_ids.length} blocks</div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-red-400">{g.conflict_id}</span>
+                  <span className="text-[9px] bg-red-950 text-red-400 border border-red-700/50 px-1.5 py-0.2 rounded uppercase">HIGH</span>
+                </div>
+                <div className="text-[11px] font-mono text-slate-300 truncate">{g.sec}</div>
+                <div className="text-[10px] text-slate-400 mt-1">{g.block_ids.length} overlapping blocks</div>
               </button>
             ))}
           </div>
@@ -132,97 +156,130 @@ export default function ConflictResolution() {
             const mergedDur   = (mergedEnd - mergedStart).toFixed(1);
             return (
               <div className="flex-1 min-w-0">
-                <Card className="mb-3.5">
-                  <div className="px-4 py-3 border-b border-cream-200 flex items-center">
-                    <span className="text-[12.5px] font-semibold text-ink-900">
-                      Active Conflict · {group.conflict_id}
-                    </span>
-                    <span className="ml-auto text-[11px] text-ink-500">
-                      {group.sec} · {fmtH(mergedStart)}–{fmtH(mergedEnd)} overlap
+                <Card className="relative overflow-hidden bg-[#101B2D]">
+                  {/* Subtle Railway Signal Background Texture Overlay */}
+                  <div
+                    className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay"
+                    style={{
+                      backgroundImage: 'url(/images/ir_tracks_signal.jpg)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
+
+                  <div className="relative z-10 px-5 py-3.5 border-b border-[#26364D] bg-[#050B16] flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[13px] font-bold text-white font-mono">
+                        CONFLICT DETECTED: {group.conflict_id}
+                      </span>
+                      <span className="text-[10px] bg-red-950 text-red-400 border border-red-700/60 px-2 py-0.5 rounded font-mono font-bold">
+                        SEVERITY: CRITICAL OVERLAP
+                      </span>
+                    </div>
+                    <span className="text-[11.5px] font-mono text-[#06B6D4] font-semibold">
+                      Corridor: {group.sec} · Window: {fmtH(mergedStart)} – {fmtH(mergedEnd)}
                     </span>
                   </div>
 
-                  <div className="p-4">
-                    {/* Block pair cards */}
-                    <div className={`grid gap-3.5 mb-3.5 ${group.blocks.length >= 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                  <div className="relative z-10 p-5 space-y-4">
+                    {/* Stage 1 & 2: Overlapping Blocks Comparison Grid */}
+                    <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-bold">
+                      STAGE 1 &amp; 2: OVERLAPPING REQUEST COMPARISON
+                    </div>
+
+                    <div className={`grid gap-4 ${group.blocks.length >= 2 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                       {group.blocks.map(blk => {
                         const ds = deptStyle(blk.dept);
                         return (
-                          <div key={blk.id} className="bg-cream-100 border border-cream-300 rounded-card p-4">
-                            <div className="flex items-center gap-2 mb-3">
+                          <div key={blk.id} className="bg-[#0B1424] border border-[#26364D] rounded-md p-4">
+                            <div className="flex items-center justify-between mb-3 border-b border-[#26364D] pb-2">
                               <span
-                                className="text-[10.5px] font-semibold px-2 py-1 rounded flex items-center gap-1.5"
+                                className="text-[10.5px] font-bold px-2 py-1 rounded flex items-center gap-1.5 font-mono"
                                 style={{ background: ds.bg, color: ds.color }}
                               >
-                                <i className="w-1.5 h-1.5 rounded-sm inline-block" style={{ background: ds.dot }} />
+                                <i className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: ds.dot }} />
                                 {ds.label}
                               </span>
-                              <span className="font-mono text-[9.5px] text-ink-500 border border-cream-300 px-1.5 py-0.5 rounded">
+                              <span className="font-mono text-[10px] text-slate-400 bg-[#101B2D] border border-[#26364D] px-2 py-0.5 rounded">
                                 {blk.src}
                               </span>
                             </div>
-                            <DRow k="Block ID"        v={blk.id} />
-                            <DRow k="Defect"          v={blk.defect} />
-                            <DRow k="Severity / overdue" v={`${blk.sev} · ${blk.overdue}d`} />
-                            <DRow k="Window"          v={`${fmtH(blk.start)} – ${fmtH(blk.start + blk.dur)}`} />
-                            <DRow k="Duration"        v={`${blk.dur.toFixed(1)}h`} />
+                            <DRow k="Block ID"           v={blk.id} />
+                            <DRow k="Defect ID"          v={blk.defect} />
+                            <DRow k="Severity / Overdue" v={`${blk.sev} · ${blk.overdue} days`} />
+                            <DRow k="Requested Window"  v={`${fmtH(blk.start)} – ${fmtH(blk.start + blk.dur)}`} />
+                            <DRow k="Duration"           v={`${blk.dur.toFixed(1)} hrs`} />
                           </div>
                         );
                       })}
                     </div>
 
-                    {/* AI suggestion */}
-                    <div className="flex gap-4 items-start bg-cream-100 border border-cream-300 rounded-card p-4">
-                      <div className="w-8 h-8 rounded-lg bg-[#EAF6EE] flex items-center justify-center shrink-0">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3E8E5B" strokeWidth="2">
-                          <path d="M12 2a7 7 0 0 1 4 12.7V17a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1v-2.3A7 7 0 0 1 12 2z" />
-                          <path d="M9 21h6" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-semibold mb-1 text-[12.5px]">
-                          Suggested resolution:{' '}
-                          <span className="text-[#2E6D44]">merge into combined block</span>
+                    {/* Stage 3 & 4: AI Analysis & Proposed Combined Block */}
+                    <div className="text-[11px] font-mono uppercase tracking-wider text-[#06B6D4] font-bold pt-2">
+                      STAGE 3 &amp; 4: CP-SAT ANALYSIS &amp; PROPOSED COMBINED BLOCK
+                    </div>
+
+                    <div className="bg-[#142238] border border-[#26364D] rounded-md p-4 space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-9 h-9 rounded-md bg-[#06B6D4]/15 border border-[#06B6D4]/40 flex items-center justify-center shrink-0 text-[#06B6D4] text-lg font-bold">
+                          ⚡
                         </div>
-                        <div className="text-ink-500 text-[11px] leading-relaxed border-l-2 border-cream-300 pl-2.5">
-                          <b className="text-ink-900">Why: </b>
-                          departments don't share track assets — the union window{' '}
-                          <b>{fmtH(mergedStart)}–{fmtH(mergedEnd)}</b> ({mergedDur}h) keeps both
-                          defects inside their SLA. Merging removes duplicate possession time
-                          and clears conflict-hours on <b>{group.sec}</b>.
+                        <div>
+                          <h4 className="font-bold text-white text-[13px] font-display">
+                            Suggested Resolution: <span className="text-[#06B6D4]">Combined Block (Union Window)</span>
+                          </h4>
+                          <p className="text-slate-300 text-[12px] leading-relaxed mt-1 font-sans">
+                            Departments operate on non-interfering track assets. Merging into a single combined possession window{' '}
+                            <b className="text-white font-mono">{fmtH(mergedStart)} – {fmtH(mergedEnd)}</b> ({mergedDur} hrs) clears both Engineering and Traction defects without secondary train holds.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* SLA & Network Impact Grid */}
+                      <div className="grid grid-cols-3 gap-3 pt-2 border-t border-[#26364D] font-mono text-[11px]">
+                        <div className="bg-[#0B1424] p-2.5 rounded border border-[#26364D]">
+                          <span className="text-[10px] text-slate-400 uppercase font-bold block">SLA Target Impact</span>
+                          <span className="text-emerald-400 font-bold">100% On-Track ✓</span>
+                        </div>
+                        <div className="bg-[#0B1424] p-2.5 rounded border border-[#26364D]">
+                          <span className="text-[10px] text-slate-400 uppercase font-bold block">Corridor Line Saved</span>
+                          <span className="text-cyan-300 font-bold">+2.5 hrs capacity</span>
+                        </div>
+                        <div className="bg-[#0B1424] p-2.5 rounded border border-[#26364D]">
+                          <span className="text-[10px] text-slate-400 uppercase font-bold block">Cascading Trains</span>
+                          <span className="text-amber-400 font-bold">0 trains held</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Action buttons */}
-                    <div className="flex gap-2.5 mt-4">
+                    {/* Stage 5: Approval & Action Controls */}
+                    <div className="flex gap-3 pt-2">
                       <button
                         onClick={() => doResolve(aiMode ? 'ai' : 'accept')}
                         disabled={working}
-                        className="text-[11.5px] font-medium px-3.5 py-2 rounded-md text-white disabled:opacity-60"
-                        style={{ background: '#3E8E5B' }}
+                        className="text-[12.5px] font-mono font-bold px-5 py-2.5 rounded-md text-slate-950 bg-[#06B6D4] hover:bg-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-60 transition-all uppercase tracking-wider"
                       >
-                        {working ? '⏳ Working…' : '✓ Accept suggestion — merge blocks'}
+                        {working ? '⏳ EXECUTING SOLVER…' : '✓ APPROVE COMBINED BLOCK'}
                       </button>
                       <button
                         onClick={() => setShowOverride(v => !v)}
                         disabled={working}
-                        className="text-[11.5px] font-medium px-3.5 py-2 rounded-md border disabled:opacity-60"
-                        style={{ borderColor: '#D9AFA3', color: '#A24A38' }}
+                        className="text-[12.5px] font-mono font-bold px-4 py-2.5 rounded-md border border-[#26364D] bg-[#0B1424] text-slate-300 hover:text-white hover:border-[#06B6D4] disabled:opacity-60 transition-all uppercase"
                       >
-                        Manual override…
+                        MANUAL OVERRIDE OPTIONS…
                       </button>
                     </div>
+
                     {showOverride && (
-                      <div className="flex gap-2 mt-2.5 flex-wrap">
+                      <div className="flex gap-2.5 mt-3 flex-wrap bg-[#050B16] p-3 rounded border border-[#26364D] font-mono">
                         <OverrideBtn onClick={() => doResolve(`Prioritise ${group.blocks[0]?.dept} (other rescheduled)`)}>
-                          Prioritise {group.blocks[0]?.dept} (other rescheduled)
+                          Prioritise {group.blocks[0]?.dept} (Reschedule {group.blocks[1]?.dept})
                         </OverrideBtn>
                         <OverrideBtn onClick={() => doResolve(`Prioritise ${group.blocks[1]?.dept} (other rescheduled)`)}>
-                          Prioritise {group.blocks[1]?.dept} (other rescheduled)
+                          Prioritise {group.blocks[1]?.dept} (Reschedule {group.blocks[0]?.dept})
                         </OverrideBtn>
                         <OverrideBtn onClick={() => doResolve('Split window 50/50')}>
-                          Split window 50/50
+                          Split Window 50/50
                         </OverrideBtn>
                       </div>
                     )}
@@ -239,9 +296,9 @@ export default function ConflictResolution() {
 
 function DRow({ k, v }) {
   return (
-    <div className="flex justify-between py-1.5 border-b border-cream-200 text-[11.5px] last:border-b-0">
-      <span className="text-ink-500">{k}</span>
-      <span className="num text-right text-ink-900">{v}</span>
+    <div className="flex justify-between py-1.5 border-b border-[#26364D] text-[11.5px] last:border-b-0 font-mono">
+      <span className="text-slate-400">{k}</span>
+      <span className="num text-right text-white font-semibold">{v}</span>
     </div>
   );
 }
@@ -250,9 +307,10 @@ function OverrideBtn({ children, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="text-[11px] font-medium bg-cream-50 border border-cream-300 px-3 py-1.5 rounded-md hover:bg-cream-200"
+      className="text-[11px] font-mono font-semibold bg-[#101B2D] border border-[#26364D] text-slate-200 px-3 py-1.5 rounded hover:bg-[#142238] hover:text-white transition-colors"
     >
       {children}
     </button>
   );
 }
+

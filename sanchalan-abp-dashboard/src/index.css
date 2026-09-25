@@ -7,23 +7,69 @@ html, body, #root {
 }
 
 body {
-  background:
-    radial-gradient(900px 500px at 90% -10%, rgba(58, 172, 163, 0.10), transparent 60%),
-    radial-gradient(700px 420px at -5% 110%, rgba(185, 129, 44, 0.08), transparent 55%),
-    #FDFBF5;
-  color: #2B2A22;
-  font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  background-color: #050B16; /* Near-black navy canvas */
+  color: #E2E8F0;            /* Slate-200 */
+  font-family: 'Inter', 'Plus Jakarta Sans', 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: #E4D6AF; border-radius: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #26364D; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #06B6D4; }
+::-webkit-scrollbar-track { background: #0B1424; }
 
+/* Tabular numbers for operational data values */
 .num { font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+
+/* Conflict / warning stripe pattern */
+.conflict-stripes {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(239, 68, 68, 0.8),
+    rgba(239, 68, 68, 0.8) 10px,
+    rgba(153, 27, 27, 0.9) 10px,
+    rgba(153, 27, 27, 0.9) 20px
+  ) !important;
+}
+
+/* Railway grid line texture overlay */
+.rail-grid-bg {
+  background-image: linear-gradient(to right, rgba(38, 54, 77, 0.15) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(38, 54, 77, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Screen transition */
+.screen-enter { animation: fade-in 0.2s ease-out; }
 
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.screen-enter { animation: fade-in 0.25s ease; }
+
+/* Dark Card variant — used for inner content panels */
+.card-dark {
+  background: #101B2D;       /* panel background */
+  border: 1px solid #26364D; /* border */
+  border-radius: 6px;
+}
+
+/* Subtle inner panel */
+.panel-inset {
+  background: #0B1424;       /* secondary background */
+  border: 1px solid #26364D; /* border */
+  border-radius: 6px;
+}
+
+/* Elevated panel */
+.panel-elevated {
+  background: #142238;
+  border: 1px solid #26364D;
+  border-radius: 6px;
+}
+
+/* Signal Teal glow for active elements */
+.glow-teal {
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+}
+

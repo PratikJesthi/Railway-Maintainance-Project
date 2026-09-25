@@ -7,12 +7,14 @@ import { fmtWindow } from '../utils.js';
 const AppCtx = createContext(null);
 
 export const SCREENS = {
-  command: { id: 'command', title: 'Command Centre', subtitle: 'System-wide KPIs · Week 37', hindi: 'नियंत्रण केंद्र' },
-  timeline: { id: 'timeline', title: 'Corridor Timeline', subtitle: 'NDLS → BPL · possession plan', hindi: 'समय-सारणी' },
+  overview: { id: 'overview', title: 'Overview', subtitle: 'Executive Operations & Corridor Health', hindi: 'मुख्य विवरण' },
+  command: { id: 'command', title: 'Command Centre', subtitle: 'System-wide KPIs & Real-time Console', hindi: 'नियंत्रण केंद्र' },
+  timeline: { id: 'timeline', title: 'Corridor Timeline', subtitle: 'NDLS → BPL possession plan', hindi: 'समय-सारणी' },
   timetable: { id: 'timetable', title: 'Train Timetable', subtitle: 'Section passes & path-hold schedules', hindi: 'ट्रेन समय-सारणी' },
   queue: { id: 'queue', title: 'Priority Queue', subtitle: 'ML-ranked · transparent scoring', hindi: 'प्राथमिकता सूची' },
   conflict: { id: 'conflict', title: 'Conflict Resolution', subtitle: 'Multi-department coordination', hindi: 'विवाद समाधान' },
-  reports: { id: 'reports', title: 'Reports & Horizon Planning', subtitle: 'Weekly ops ↔ monthly planning', hindi: 'रिपोर्ट एवं योजना' },
+  assets: { id: 'assets', title: 'Asset & Stock', subtitle: 'Machinery, Track Gear & Depot Status', hindi: 'परिसंपत्ति एवं स्टॉक' },
+  reports: { id: 'reports', title: 'Reports & Planning', subtitle: 'Weekly ops ↔ monthly planning', hindi: 'रिपोर्ट एवं योजना' },
   audit: { id: 'audit', title: 'Audit Log', subtitle: 'Every decision traceable — overrides, AI actions, what-ifs', hindi: 'लेखा-परीक्षा लॉग' },
 };
 

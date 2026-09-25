@@ -4,12 +4,12 @@ import Card from '../ui/Card.jsx';
 import { fmtWindow } from '../../utils.js';
 
 const TYPE_BADGE = {
-  SF:   { bg: 'bg-cyan-900/60',   text: 'text-cyan-200',   border: 'border-cyan-700/50', label: 'Superfast' },
-  EXP:  { bg: 'bg-blue-900/60',   text: 'text-blue-200',   border: 'border-blue-700/50', label: 'Express' },
-  RAJ:  { bg: 'bg-amber-900/60',  text: 'text-amber-200',  border: 'border-amber-700/50', label: 'Rajdhani' },
-  PASS: { bg: 'bg-emerald-900/60',text: 'text-emerald-200',border: 'border-emerald-700/50', label: 'Passenger' },
-  MEMU: { bg: 'bg-teal-900/60',   text: 'text-teal-200',   border: 'border-teal-700/50', label: 'MEMU' },
-  DEMU: { bg: 'bg-purple-900/60', text: 'text-purple-200', border: 'border-purple-700/50', label: 'DEMU' },
+  SF:   { bg: 'bg-[#00B4D8]/20',  text: 'text-[#00B4D8]', border: 'border-[#00B4D8]/40', label: 'Superfast' },
+  EXP:  { bg: 'bg-blue-900/60',   text: 'text-blue-300',   border: 'border-blue-700/50', label: 'Express' },
+  RAJ:  { bg: 'bg-amber-900/60',  text: 'text-amber-300',  border: 'border-amber-700/50', label: 'Rajdhani' },
+  PASS: { bg: 'bg-emerald-900/60',text: 'text-emerald-300',border: 'border-emerald-700/50', label: 'Passenger' },
+  MEMU: { bg: 'bg-teal-900/60',   text: 'text-teal-300',   border: 'border-teal-700/50', label: 'MEMU' },
+  DEMU: { bg: 'bg-purple-900/60', text: 'text-purple-300', border: 'border-purple-700/50', label: 'DEMU' },
 };
 
 export default function TrainTimetable() {
@@ -87,14 +87,14 @@ export default function TrainTimetable() {
   }, [filteredRows]);
 
   return (
-    <div className="screen-enter">
+    <div className="screen-enter space-y-4">
       {/* Filters and search bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex flex-wrap items-center gap-2.5">
           <select
             value={selectedSec}
             onChange={(e) => setSelectedSec(e.target.value)}
-            className="bg-cream-50 border border-cream-300 rounded-md text-[11.5px] px-2.5 py-1.5 font-medium text-ink-900"
+            className="bg-[#101B2D] border border-[#26364D] rounded-md text-[11.5px] px-2.5 py-1.5 font-medium text-white outline-none focus:border-[#06B6D4] font-mono"
           >
             <option value="">All Corridor Sections</option>
             {data.sections.map((s) => (
@@ -105,7 +105,7 @@ export default function TrainTimetable() {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="bg-cream-50 border border-cream-300 rounded-md text-[11.5px] px-2.5 py-1.5 font-medium text-ink-900"
+            className="bg-[#101B2D] border border-[#26364D] rounded-md text-[11.5px] px-2.5 py-1.5 font-medium text-white outline-none focus:border-[#06B6D4] font-mono"
           >
             <option value="">All Train Types</option>
             <option value="SF">Superfast (SF)</option>
@@ -122,10 +122,10 @@ export default function TrainTimetable() {
               placeholder="Search train #, name, route, section..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-cream-50 border border-cream-300 rounded-md text-[11.5px] pl-7 pr-3 py-1.5 w-64 text-ink-900 placeholder:text-ink-500/60 focus:outline-none focus:border-cyan-600"
+              className="bg-[#101B2D] border border-[#26364D] rounded-md text-[11.5px] pl-7 pr-3 py-1.5 w-64 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#06B6D4] font-sans"
             />
             <svg
-              className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-ink-500"
+              className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -136,39 +136,39 @@ export default function TrainTimetable() {
         </div>
 
         {/* Stats Summary */}
-        <div className="flex items-center gap-4 text-[11px] text-ink-500 bg-cream-100/70 border border-cream-300 px-3 py-1.5 rounded-md">
-          <span>Total Section Passes: <strong className="text-ink-900">{stats.total}</strong></span>
-          <span className="text-cream-400">•</span>
-          <span>Unique Trains: <strong className="text-ink-900">{stats.uniqueTrains}</strong></span>
-          <span className="text-cream-400">•</span>
-          <span>Mail/Express: <strong className="text-cyan-700">{stats.sfExp}</strong></span>
-          <span className="text-cream-400">•</span>
-          <span>Local/Passenger: <strong className="text-emerald-700">{stats.pass}</strong></span>
+        <div className="flex items-center gap-4 text-[11px] text-slate-300 bg-[#101B2D] border border-[#26364D] px-3 py-1.5 rounded-md font-mono">
+          <span>Total Passes: <strong className="text-white">{stats.total}</strong></span>
+          <span className="text-[#26364D]">•</span>
+          <span>Unique Trains: <strong className="text-white">{stats.uniqueTrains}</strong></span>
+          <span className="text-[#26364D]">•</span>
+          <span>Mail/Express: <strong className="text-[#06B6D4]">{stats.sfExp}</strong></span>
+          <span className="text-[#26364D]">•</span>
+          <span>Local/Passenger: <strong className="text-emerald-400">{stats.pass}</strong></span>
         </div>
       </div>
 
       {loading ? (
-        <Card>
-          <div className="p-8 text-center text-[12px] text-ink-500">
+        <Card className="bg-[#101B2D]">
+          <div className="p-8 text-center text-[12px] text-slate-400 font-mono">
             Loading section timetable & path-holds...
           </div>
         </Card>
       ) : error ? (
-        <Card>
-          <div className="p-6 text-center text-[12px] text-red-600 font-medium">
+        <Card className="bg-[#101B2D]">
+          <div className="p-6 text-center text-[12px] text-red-400 font-medium font-mono">
             {error}
           </div>
         </Card>
       ) : filteredRows.length === 0 ? (
-        <Card>
-          <div className="p-8 text-center text-[12px] text-ink-500">
+        <Card className="bg-[#101B2D]">
+          <div className="p-8 text-center text-[12px] text-slate-400 font-mono">
             No train timetable records match your selected filters.
           </div>
         </Card>
       ) : (
-        <Card>
+        <Card className="bg-[#101B2D] overflow-hidden">
           <div
-            className="grid text-[10px] uppercase tracking-wider text-ink-500 px-4 py-2.5 border-b border-cream-200 font-semibold bg-cream-100/50 items-center gap-3"
+            className="grid text-[10px] uppercase tracking-wider text-slate-400 px-4 py-2.5 border-b border-[#26364D] font-mono font-bold bg-[#050B16] items-center gap-3"
             style={{ gridTemplateColumns: '80px 1.5fr 85px 1.5fr 100px 220px 60px' }}
           >
             <span>Train #</span>
@@ -179,9 +179,9 @@ export default function TrainTimetable() {
             <span className="whitespace-nowrap">Section Pass Window</span>
             <span className="text-right">Day</span>
           </div>
-          <div className="divide-y divide-cream-200 max-h-[calc(100vh-220px)] overflow-y-auto">
+          <div className="divide-y divide-[#26364D] max-h-[calc(100vh-220px)] overflow-y-auto">
             {filteredRows.map((r) => {
-              const badge = TYPE_BADGE[r.train_type] || { bg: 'bg-gray-800', text: 'text-gray-200', border: 'border-gray-700', label: r.train_type };
+              const badge = TYPE_BADGE[r.train_type] || { bg: 'bg-slate-800', text: 'text-slate-300', border: 'border-slate-700', label: r.train_type };
               const windowStr = fmtWindow(r.pass_start_h, r.pass_dur_h);
               const isExpanded = activeRow?.id === r.id;
 
@@ -190,54 +190,54 @@ export default function TrainTimetable() {
                   <div
                     onClick={() => setActiveRow(isExpanded ? null : r)}
                     className={`grid items-center px-4 py-2.5 text-[11.5px] gap-3 cursor-pointer transition-colors ${
-                      isExpanded ? 'bg-purple-50/80 border-l-4 border-l-purple-600' : 'hover:bg-cream-100/60'
+                      isExpanded ? 'bg-[#142238] border-l-4 border-l-[#06B6D4]' : 'hover:bg-[#0B1424]'
                     }`}
                     style={{ gridTemplateColumns: '80px 1.5fr 85px 1.5fr 100px 220px 60px' }}
                   >
-                    <span className="font-mono font-semibold text-cyan-800 text-[12px]">{r.train_number}</span>
-                    <span className="font-medium text-ink-900 truncate pr-1" title={r.train_name}>{r.train_name}</span>
+                    <span className="font-mono font-bold text-[#06B6D4] text-[12px]">{r.train_number}</span>
+                    <span className="font-medium text-white truncate pr-1" title={r.train_name}>{r.train_name}</span>
                     <div>
-                      <span className={`inline-block px-1.5 py-0.5 text-[9.5px] font-bold uppercase rounded border ${badge.bg} ${badge.text} ${badge.border}`}>
+                      <span className={`inline-block px-1.5 py-0.5 text-[9.5px] font-mono font-bold uppercase rounded border ${badge.bg} ${badge.text} ${badge.border}`}>
                         {r.train_type}
                       </span>
                     </div>
-                    <span className="text-[10.5px] text-ink-700 truncate pr-1" title={`${r.from_name} → ${r.to_name}`}>
+                    <span className="text-[10.5px] text-slate-300 truncate pr-1" title={`${r.from_name} → ${r.to_name}`}>
                       {r.from_name} → {r.to_name}
                     </span>
-                    <span className="font-mono text-[10.5px] text-ink-800 font-medium">{r.sec}</span>
+                    <span className="font-mono text-[10.5px] text-slate-200 font-semibold">{r.sec}</span>
                     <div>
-                      <span className="font-mono text-[10.5px] text-ink-700 bg-cream-200/60 px-2 py-0.5 rounded inline-block whitespace-nowrap border border-cream-300/40">
+                      <span className="font-mono text-[10.5px] text-cyan-300 bg-[#050B16] px-2 py-0.5 rounded inline-block whitespace-nowrap border border-[#26364D]">
                         {windowStr}
                       </span>
                     </div>
-                    <span className="text-[10.5px] text-ink-500 font-medium text-right">Day {r.day}</span>
+                    <span className="text-[10.5px] text-slate-400 font-medium text-right font-mono">Day {r.day}</span>
                   </div>
 
                   {/* ML Cascade Delay Predictor Drawer */}
                   {isExpanded && (
-                    <div className="bg-purple-900/5 border-y border-purple-200 p-4 text-[11.5px]">
+                    <div className="bg-[#0B1424] border-y border-[#26364D] p-4 text-[11.5px]">
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
-                          <span className="text-base">⚡</span>
-                          <span className="font-semibold text-purple-900">
+                          <span className="text-base text-violet-400">⚡</span>
+                          <span className="font-semibold text-violet-200 font-display">
                             ML Cascade Delay Predictor · {r.train_number} {r.train_name}
                           </span>
-                          <span className="text-[10px] bg-purple-100 text-purple-800 border border-purple-300 px-2 py-0.5 rounded font-mono">
+                          <span className="text-[10px] bg-violet-900/40 text-violet-300 border border-violet-700/40 px-2 py-0.5 rounded font-mono">
                             R²=0.9289 · 171k cascade events
                           </span>
                         </div>
                         <button
                           onClick={() => setActiveRow(null)}
-                          className="text-[11px] text-ink-400 hover:text-ink-700"
+                          className="text-[11px] font-mono text-slate-400 hover:text-white"
                         >
-                          ✕ Close
+                          ✕ CLOSE
                         </button>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-4 items-end bg-white border border-purple-100 p-3.5 rounded-lg shadow-sm">
+                      <div className="grid grid-cols-3 gap-4 items-end bg-[#101B2D] border border-[#26364D] p-3.5 rounded-md">
                         <div>
-                          <label className="block text-[10.5px] text-ink-500 mb-1">
-                            Disruption Delay: <strong className="text-ink-900">{delayInputMins} mins</strong>
+                          <label className="block text-[10.5px] text-slate-400 mb-1 font-mono">
+                            Disruption Delay: <strong className="text-white">{delayInputMins} mins</strong>
                           </label>
                           <input
                             type="range"
@@ -246,18 +246,18 @@ export default function TrainTimetable() {
                             step="5"
                             value={delayInputMins}
                             onChange={(e) => setDelayInputMins(Number(e.target.value))}
-                            className="w-full accent-purple-600"
+                            className="w-full accent-[#06B6D4]"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-[10.5px] text-ink-500 mb-1">
-                            Cascade Hop Depth: <strong className="text-ink-900">{depthInput === 0 ? '0 (Root)' : `Hop ${depthInput}`}</strong>
+                          <label className="block text-[10.5px] text-slate-400 mb-1 font-mono">
+                            Cascade Hop Depth: <strong className="text-white">{depthInput === 0 ? '0 (Root)' : `Hop ${depthInput}`}</strong>
                           </label>
                           <select
                             value={depthInput}
                             onChange={(e) => setDepthInput(Number(e.target.value))}
-                            className="w-full bg-cream-50 border border-cream-300 rounded px-2 py-1 text-[11px] text-ink-900"
+                            className="w-full bg-[#050B16] border border-[#26364D] rounded px-2 py-1 text-[11px] text-white font-mono"
                           >
                             <option value={0}>Hop 0 — Root Disruption</option>
                             <option value={1}>Hop 1 — Adjacent Section</option>
@@ -267,27 +267,27 @@ export default function TrainTimetable() {
                           </select>
                         </div>
 
-                        <div className="bg-purple-50 border border-purple-200 rounded p-2.5 text-right">
-                          <span className="text-[10px] text-purple-700 block uppercase font-bold tracking-wide">
+                        <div className="bg-[#142238] border border-[#26364D] rounded p-2.5 text-right font-mono">
+                          <span className="text-[10px] text-violet-300 block uppercase font-bold tracking-wide">
                             Predicted Downstream Delay
                           </span>
                           {cascadeLoading ? (
-                            <span className="text-ink-400 text-[11px]">Calculating...</span>
+                            <span className="text-slate-400 text-[11px]">Calculating...</span>
                           ) : cascadeResult ? (
-                            <span className="text-lg font-mono font-bold text-purple-900">
+                            <span className="text-lg font-mono font-bold text-violet-200">
                               +{cascadeResult.predicted_propagated_delay_minutes} mins
-                              <span className="text-[10px] text-purple-700 font-normal ml-1">
+                              <span className="text-[10px] text-violet-400 font-normal ml-1">
                                 ({cascadeResult.predicted_propagated_delay_seconds.toFixed(0)}s)
                               </span>
                             </span>
                           ) : (
-                            <span className="text-red-500 text-[11px]">Unavailable</span>
+                            <span className="text-red-400 text-[11px]">Unavailable</span>
                           )}
                         </div>
                       </div>
 
                       {cascadeResult?.rationale && (
-                        <div className="mt-2.5 text-[10.5px] text-purple-900/80 bg-purple-50/60 border-l-2 border-purple-400 pl-2.5 py-1 italic">
+                        <div className="mt-2.5 text-[10.5px] text-violet-300 bg-[#142238]/60 border-l-2 border-violet-400 pl-2.5 py-1 font-mono">
                           {cascadeResult.rationale}
                         </div>
                       )}
@@ -301,4 +301,5 @@ export default function TrainTimetable() {
       )}
     </div>
   );
+
 }
