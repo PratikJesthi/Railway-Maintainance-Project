@@ -3,8 +3,8 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     app_name: str = "SANCHALAN ABP API"
-    # Database URLs (PostgreSQL as primary, SQLite as fallback/standby)
-    database_url: str = "postgresql://sanchalan:sanchalan@localhost:5433/sanchalan"
+    # Database URLs (SQLite as primary active DB; PostgreSQL fallback/future integration retained)
+    database_url: str = "sqlite:///./sanchalan.db"
     fallback_database_url: str = "sqlite:///./sanchalan.db"
 
     # Vite dev server + common local frontend ports
