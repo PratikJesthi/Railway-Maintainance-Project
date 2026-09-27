@@ -1,3 +1,6 @@
 *.paruet filter=lfs diff=lfs merge=lfs -text
 *.json filter=lfs diff=lfs merge=lfs -text
 *.parquet filter=lfs diff=lfs merge=lfs -text
+
+sanchalan-abp-dashboard/package.json -filter -diff -merge text
+sanchalan-abp-dashboard/package-lock.json -filter -diff -merge text
